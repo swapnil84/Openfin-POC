@@ -1,0 +1,20 @@
+{
+  "name": "openfin-template",
+  "version": "0.0.0",
+  "scripts": {
+    "stock-grid": "openfin --launch --config src/stock-grid.json",
+    "stock-details": "openfin --launch --config src/stock-details.json"
+  },
+  "devDependencies": {
+    "@types/openfin": "latest",
+    "hadouken-js-adapter": "latest",
+    "live-server": "latest",
+    "openfin-cli": "latest",
+    "http-server": "latest"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "finnhub": "^1.0.1"
+  }
+}
