@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mphasis OpenFin POC</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/15.0.0/ag-grid.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .ag-blue .ag-value-change-value-highlight {
+            background-color: rgba(22, 160, 133, 0.5);
+            transition: background-color 0.1s
+        }
+
+        .ag-blue .ag-value-change-delta-down {
+            color: #e53935;
+        }
+
+        .ag-blue .ag-value-change-delta-up {
+            color: #43a047;
+        }
+    </style>
+</head>
+<body>
+    Stock Details: <span id="detailStatus">Not Available.</span>
+<div id="myGrid" style="height: 250px" class="ag-blue"></div>
+<script src="stock-grid.js"></script>
+</body>
+</html>
