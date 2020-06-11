@@ -1,49 +1,25 @@
-var externalApp;
-var detailApplication;
-var appRunning = false;
+var apps = [];
+var detailsData;
 
-async function initWithOpenFin(){
-    alert("OpenFin is available");
+document.addEventListener("DOMContentLoaded", function(){
+    initStockList();
+});
+
+function initStockList(){
+    try{
+        fin.desktop.main(function(){
+            initStockListWithOpenFin();
+        })
+    }catch(err){
+        initNoOpenFin();
+    }
+};
+
+function initStockListWithOpenFin(){
+    // alert("OpenFin is available");
     var eGridDiv = document.querySelector('#myGrid');
     new agGrid.Grid(eGridDiv, gridOptions);
-    // fin.desktop.System.registerExternalConnection("ag-grid-simple", function() {
-    //     console.log(arguments);
-    // });
-
-    // detailApplication = await fin.ExternalApplication.wrap("ag-grid-simple");
-
-
-    // externalApp = fin.desktop.ExternalApplication.wrap('mph-stock-details-poc');
-    // console.log(externalApp);
-    // externalApp.addEventListener('connected', () => {
-    //     console.log('external app connected');
-    //     setDetailAppStatus(true);
-    // }, () => {
-    //     console.log('The registration was successful');
-    //     setDetailAppStatus(true);
-    // }, (reason, err) => {
-    //     console.log(`Error Message: ${err.message} Error Stack: ${err.stack}`);
-    // });
-
-
-    // detailApplication.on("connected", function (event) {
-    //     console.log('Connected')
-    //     setDetailAppStatus(true);
-    // });
-    // detailApplication.on("disconnected", function (event) {
-    //     console.log('closed')
-    //     setDetailAppStatus(false);
-    // });
-
-    detailApplication = fin.desktop.Application.wrap("mph-stock-details-poc");
-    detailApplication.addEventListener("connected", function (event) {
-        setDetailAppStatus(true);
-    });
-    detailApplication.addEventListener("closed", function (event) {
-        appRunning = false;
-        setDetailAppStatus(false);
-    });
-
+    initInterApp();
     getGridData();
     // getRealTimeData();
 }
@@ -68,80 +44,139 @@ let columnDefs = [
 //     {headerName: 'Volume', field: 'v', type: 'measure'}
 // ]
 
-const publishData = (data) => {
-    fin.desktop.InterApplicationBus.publish("stock selected", data)
+
+function initNewApp(CHILD_UUID){
+    return new Promise(function(resolve, reject){
+        var SpawnedApplication = new fin.desktop.Application({
+            name: 'New OpenFin Application',
+            uuid: CHILD_UUID,
+            url: "http://localhost:8080/components/stock-details/index.html",
+            mainWindowOptions: {
+                name: 'OpenFin Application',
+                autoShow: true,
+                defaultCentered: false,
+                alwaysOnTop: false,
+                saveWindowState: true,
+                icon: "favicon.ico",
+                maxHeight: 200,
+                defaultHeight: 200,
+                minHeight: 200
+            }
+        }, function () {
+            // Ensure the spawned application are closed when the main application is closed.
+            console.log("running");
+            SpawnedApplication.run();
+            resolve(SpawnedApplication)
+        });
+    })
 }
 
-async function createWin() {
-    const app = await fin.Application.start({
-        name: 'MphasisStockDetails',
-        uuid: 'mph-stock-details-poc',
-        url: 'http://localhost:8080/components/stock-details/index.html',
-        autoShow: true
-    });
-    return await app.getWindow();
-}
+function sendMessage(uuid, topic, data) {
+    var _random = Math.random() * 300;
 
-async function setAsForeground() {
-    const win = await createWin();
-    return await win.setAsForeground()
-}
-
-async function BringWindowToFront() {
-    const app = fin.Application.start({
-        name: 'MphasisStockDetails',
-        uuid: 'mph-stock-details-poc',
-        url: 'http://localhost:8080/components/stock-details/index.html',
-        autoShow: true
-    });
-    const win = app.getWindow();
-    return win.bringToFront();
-}
-
-async function createWindow() {
-    const winOption = {
-        name:'child',
-        defaultWidth: 300,
-        defaultHeight: 300,
-        url: 'http://localhost:8080/components/stock-details/index.html',
-        frame: true,
-        autoShow: true
+    var successCallback = function (e) {
+        console.log("SUCCESSFULLY SENT ");
     };
-    return await fin.Window.create(winOption);
+
+    var errorCallback = function (e) {
+        console.log("ERROR MESSAGE ", e);
+    };
+    fin.desktop.InterApplicationBus.send(uuid, topic, data, successCallback, errorCallback);
 }
+
+// function sendToNamedMessage(CHILD_UUID) {
+//     console.log(CHILD_UUID)
+//     fin.desktop.InterApplicationBus.send({
+//             uuid: CHILD_UUID,
+//             name: CHILD_UUID,
+//             topic: 'send-to-named',
+//             message: {text:'message', name:'name'},
+//             cache: 'until-delivered'
+//         },
+//         function () {
+//             console.log('sendToNamedMessage worked')
+//         },
+//         function (err) {
+//             console.log("sendToNamedMessage failed: ", err)
+//         });
+// }
+
+// Start The Application
+// async function start(symbol) {
+//     return fin.Application.start({
+//         name: 'mph-stock-details-poc-'+symbol,
+//         uuid: 'mph-stock-details-poc-'+symbol,
+//         url: 'http://localhost:8080/components/stock-details/index.html',
+//         autoShow: true,
+//         saveWindowState: true,
+//         maxHeight: 200,
+//         defaultHeight: 200,
+//         minHeight: 200
+//     });
+// }
+
+// async function createWin(symbol) {
+//     const app = await fin.Application.start({
+//         name: 'mph-stock-details-poc-'+symbol,
+//         uuid: 'mph-stock-details-poc-'+symbol,
+//         url: 'http://localhost:8080/components/stock-details/index.html',
+//         autoShow: true,
+//         saveWindowState: true,
+//         maxHeight: 200,
+//         defaultHeight: 200,
+//         minHeight: 200
+//     });
+//     return await app.getWindow();
+// }
+
+// async function setAsForeground(symbol) {
+//     const win = await createWin(symbol);
+//     return await win.setAsForeground()
+// }
+
+// async function BringWindowToFront() {
+//     const app = fin.Application.start({
+//         name: 'MphasisStockDetails',
+//         uuid: 'mph-stock-details-poc',
+//         url: 'http://localhost:8080/components/stock-details/index.html',
+//         autoShow: true
+//     });
+//     const win = app.getWindow();
+//     return win.bringToFront();
+// }
 
 function getLink(params) {
     const link = document.createElement('a')
     link.innerHTML = params.value;
     link.href = 'javascript:void(0)'
-    link.addEventListener('click', function() {
-        // fin.Application.startFromManifest('http://localhost:8080/stock-details.json')
-        createWindow()
-        .then(app => {
-            console.log('App is running')
-            publishData(params.data)
-        })
-        .catch(err => console.log(err))
-        // detailApplication.isRunning(function (running) {
+    link.addEventListener('click', function(){
+        const CHILD_UUID = 'mph-stocks-list-poc-'+params.data.symbol;
+        initNewApp(CHILD_UUID).then(function(value){
+            this.detailsData = params.data;
+            apps.push(value);
+        });
+        // const currentApplication = fin.desktop.Application.wrap("mph-stock-details-poc-"+params.data.symbol);
+        // currentApplication.isRunning(function (running) {
         //     if (running) {
-        //         this.publishData(params.data)
+        //         // alert('Application Is Already Running');
+        //         currentApplication.getWindow().setAsForeground();
         //     } else {
-        //         fin.Application.startFromManifest('http://localhost:8080/stock-details.json')
-        //         // setAsForeground()
-        //         .then(app => {
-        //             console.log('App is running')
-        //             this.publishData(params.data)
+        //         start(params.data.symbol)
+        //         // fin.Application.startFromManifest('http://localhost:8080/stock-details.json')
+        //         .then((app) => {
+        //             console.log(app, 'App is running')
+        //             fin.InterApplicationBus.send(fin.me, 'topic', 'Hello there!')
+        //             .then(() => console.log('Message sent'))
+        //             .catch(err => console.log(err));
+        //             // publishData(app.identity, params.data)
         //         })
         //         .catch(err => console.log(err))
         //     }
-        // });
+        // })
+
     })
     return link;
 }
-
-const setDetailAppStatus = function (running) {
-    document.getElementById("detailStatus").innerText = running ? "Available!" : "Not Available.";
-};
 
 const createRowData = (data) => {
     let rowData = []
@@ -152,7 +187,7 @@ const createRowData = (data) => {
 }
 
 const getGridData = function () {
-    const url = 'https://finnhub.io/api/v1/stock/symbol?exchange=US&token=brfi21vrh5raper7as70';
+    const url = 'https://finnhub.io/api/v1/stock/symbol?exchange=US&token=brgslqnrh5r9t6gjebng';
     axios.get(url).then(function (response) {
         gridOptions.api.setRowData(response.data);
         // gridOptions.api.setColumnDefs(this.getColumns(response.data));
@@ -165,39 +200,39 @@ const getGridData = function () {
     });
 }
 
-const getRealTimeData = function() {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=brfi21vrh5raper7as70');
-    const messages = [
-        {'type':'subscribe', 'symbol': 'AAPL'},
-        {'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},
-        {'type':'subscribe', 'symbol': 'IC MARKETS:1'}
-    ]
-    // Connection opened -> Subscribe
-    socket.addEventListener('open', function (event) {
-        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},))
-        // for (message in messages) {
-        //     socket.send(JSON.stringify(message))
-        // }
-        // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
-    });
+// const getRealTimeData = function() {
+//     const socket = new WebSocket('wss://ws.finnhub.io?token=brfi21vrh5raper7as70');
+//     const messages = [
+//         {'type':'subscribe', 'symbol': 'AAPL'},
+//         {'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},
+//         {'type':'subscribe', 'symbol': 'IC MARKETS:1'}
+//     ]
+//     // Connection opened -> Subscribe
+//     socket.addEventListener('open', function (event) {
+//         socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},))
+//         // for (message in messages) {
+//         //     socket.send(JSON.stringify(message))
+//         // }
+//         // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
+//     });
 
-    // Listen for messages
-    socket.addEventListener('message', function (e) {
-        const socketData = JSON.parse(e.data);
-        switch (socketData.type) {
-            case 'trade':
-                gridOptions.api.setRowData(createRowData(socketData));
-                break;
-            default:
-                console.log('unrecognised event type ' + e.type);
-        }
-    });
+//     // Listen for messages
+//     socket.addEventListener('message', function (e) {
+//         const socketData = JSON.parse(e.data);
+//         switch (socketData.type) {
+//             case 'trade':
+//                 gridOptions.api.setRowData(createRowData(socketData));
+//                 break;
+//             default:
+//                 console.log('unrecognised event type ' + e.type);
+//         }
+//     });
 
-    // Unsubscribe
-    var unsubscribe = function(symbol) {
-        socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
-    }
-}
+//     // Unsubscribe
+//     var unsubscribe = function(symbol) {
+//         socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
+//     }
+// }
 
 function getColumns(data) {
     const cols = [];
@@ -209,20 +244,10 @@ function getColumns(data) {
             }
         )
     });
-    console.log(cols);
     return cols;
 }
 
 let gridOptions = {
-    columnTypes: {
-        measure: {
-            width: 150,
-            enableValue: true,
-            cellClass: 'number',
-            // valueFormatter: numberCellFormatter,
-            cellRenderer:'agAnimateShowChangeCellRenderer'
-        }
-    },
     columnDefs: columnDefs,
     enableSorting: true,
     enableColResize: true,
@@ -234,26 +259,31 @@ let gridOptions = {
 
 function initNoOpenFin(){
     alert("OpenFin is not available - you are probably running in a browser.");
-    // Your browser-only specific code to go here...
 }
 
-function init(){
-/* Code common to both OpenFin and browser to go above.
-    Then the specific code for OpenFin and browser only to be
-    targeted in the try/catch block below. 
-*/
-    try{
-        fin.desktop.main(function(){
-            initWithOpenFin();
-        })
-    }catch(err){
-        initNoOpenFin();
-    }
-};
+// function subscribeWithName(id, name){
+//     var onSuccess = function(){
+//             console.log("1. subscribeWithName -> UUID: " + id + " Name: " +name )
+//         },
+//         onFail = function(){
+//             console.log("subscribeWithName subscription FAIL")
+//         };
 
-(function () {
-    'use strict';
-    document.addEventListener("DOMContentLoaded", function(){
-        init();
+//     fin.desktop.InterApplicationBus.subscribe(id,
+//         name,
+//         "send-to-named",
+//         function (message, uuid) {
+//             console.log(message);
+//             var _message = "The application " + uuid + " send this message " + message;
+//             _namedSendResult.innerHTML = "Topic: send-to-named, text: " + message.text +", name:"+ message.name;
+//         },onSuccess,onFail);
+// };
+
+function initInterApp(){
+    console.log("Init with interapp called");
+    _interAppMessageField = document.querySelector("#inter-app-message")
+    fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
+        sendMessage(uuid, topic, this.detailsData)
+        console.log("The application " + uuid + " has subscribed to " + topic);
     });
-}());
+};
