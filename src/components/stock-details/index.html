@@ -6,10 +6,17 @@
     <title>Mphasis OpenFin POC</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/15.0.0/ag-grid.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        ul{
+            list-style-type: none;
+            line-height: 30px;
+        }
+    </style>
 </head>
-<body>
-<h1 id="parentName"></h1>
+<body style="font-family: Arial, Helvetica, sans-serif;">
+<h1 style="font-size: 18px;" id="stock-name-wrapper">Message</h1>
+<div id="stock-details-wrapper"></div>
 <script src="stock-details.js"></script>
 </body>
 </html>
