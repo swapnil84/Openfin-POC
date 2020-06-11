@@ -1,6 +1,6 @@
 {
     "startup_app": {
-        "name": "MphasisStockDetails",
+        "name": "mph-stock-details-poc",
         "url": "http://localhost:8080/components/stock-details/index.html",
         "uuid": "mph-stock-details-poc",
         "icon": "https://www.mphasis.com/content/dam/mphasis-com/common/icons/favicon.ico",

@@ -1,6 +1,6 @@
 {
     "startup_app": {
-        "name": "OpenfinPOC",
+        "name": "mph-stocks-list-poc",
         "url": "http://localhost:8080/components/stock-grid/index.html",
         "uuid": "mph-stocks-list-poc",
         "icon": "https://www.mphasis.com/content/dam/mphasis-com/common/icons/favicon.ico",
@@ -12,7 +12,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "stable"
+        "version": "16.83.50.9"
     },
     "shortcut": {
         "company": "OpenFin",
