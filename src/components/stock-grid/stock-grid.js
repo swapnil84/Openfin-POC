@@ -56,11 +56,14 @@ function initNewApp(CHILD_UUID){
                 autoShow: true,
                 defaultCentered: false,
                 alwaysOnTop: false,
-                saveWindowState: true,
+                saveWindowState: false,
                 icon: "favicon.ico",
-                maxHeight: 200,
-                defaultHeight: 200,
-                minHeight: 200
+                maxHeight: 800,
+                defaultHeight: 600,
+                minHeight: 400,
+                maxWidth: 1200,
+                defaultWidth: 1200,
+                minWidth: 800,
             }
         }, function () {
             // Ensure the spawned application are closed when the main application is closed.

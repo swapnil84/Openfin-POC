@@ -5,7 +5,7 @@
         "uuid": "mph-stocks-list-poc",
         "icon": "https://www.mphasis.com/content/dam/mphasis-com/common/icons/favicon.ico",
         "autoShow": true,
-        "saveWindowState": true,
+        "saveWindowState": false,
         "maxHeight": 350,
         "defaultHeight": 350,
         "minHeight": 350

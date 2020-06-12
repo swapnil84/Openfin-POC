@@ -19,7 +19,7 @@ const getData = function (url) {
             <li>Day's Range - ${res.data.l} - ${res.data.h}</li>
         </ul>`
         _stockDetailsWrapper.innerHTML = listItem
-        // updateDate(data);
+        updateDate(data);
         // gridOptions.api.setColumnDefs(this.getColumns(response.data));
     })
     .catch(function (error) {
