@@ -12,13 +12,14 @@ var stockDetails;
 
 const getData = function (url) {
     axios.get(url).then(function (res) {
-        console.log(res)
+        console.log("url: " + url + "res.data" + res.data);
         const listItem = `<ul>
             <li>Previous Close - ${res.data.pc}</li>
             <li>Open - ${res.data.o}</li>
             <li>Day's Range - ${res.data.l} - ${res.data.h}</li>
         </ul>`
         _stockDetailsWrapper.innerHTML = listItem
+        // updateDate(data);
         // gridOptions.api.setColumnDefs(this.getColumns(response.data));
     })
     .catch(function (error) {
@@ -70,6 +71,30 @@ function init(){
         initNoOpenFin();
     }
 };
+
+var data = {
+    prevClose: "314.96",
+    open: "315.03",
+    dayRange: "314.75 - 318.52",
+    weekRange: "314.96",
+    marketCap: "314.75 - 318.52",
+    beta5YMonthly: "314.96",
+    peRatio: "314.75 - 318.52",
+    eps: "314.75 - 318.52",
+    earningDate: "314.75 - 318.52",
+}
+
+function updateDate(data){
+    document.getElementById("prevClose").innerText = data.prevClose;
+    document.getElementById("open").innerText = data.open;
+    document.getElementById("dayRange").innerText = data.dayRange;
+    document.getElementById("weekRange").innerText = data.weekRange;
+    document.getElementById("marketCap").innerText = data.marketCap;
+    document.getElementById("beta5YMonthly").innerText = data.beta5YMonthly;
+    document.getElementById("peRatio").innerText = data.peRatio;
+    document.getElementById("eps").innerText = data.eps;
+    document.getElementById("earningDate").innerText = data.earningDate;
+}
 
 (function () {
     'use strict';
