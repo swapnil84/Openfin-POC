@@ -75,7 +75,7 @@ function sendMessage(uuid, topic, data) {
     var _random = Math.random() * 300;
 
     var successCallback = function (e) {
-        console.log("SUCCESSFULLY SENT  - Hi Swapnil");
+        console.log("SUCCESSFULLY SENT  - Hi Swapnil !!!");
     };
 
     var errorCallback = function (e) {
