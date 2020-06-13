@@ -25,8 +25,8 @@ function initStockListWithOpenFin(){
 }
 
 let columnDefs = [
-    {headerName: 'Symbol', field: 'symbol', cellRenderer: function(params) {
-        return this.getLink(params)
+    {headerName: 'Symbol', field: 'symbol', cellRenderer: (params) => {
+        return getLink(params)
     }},
     {headerName: 'Display Symbol', field: 'displaySymbol'},
     {headerName: 'Description', field: 'description'}
@@ -56,11 +56,14 @@ function initNewApp(CHILD_UUID){
                 autoShow: true,
                 defaultCentered: false,
                 alwaysOnTop: false,
-                saveWindowState: true,
+                saveWindowState: false,
                 icon: "favicon.ico",
-                maxHeight: 200,
-                defaultHeight: 200,
-                minHeight: 200
+                maxHeight: 600,
+                defaultHeight: 600,
+                minHeight: 600,
+                maxWidth: 1100,
+                minWidth: 1100,
+                defaultWidth: 1100
             }
         }, function () {
             // Ensure the spawned application are closed when the main application is closed.
@@ -75,12 +78,13 @@ function sendMessage(uuid, topic, data) {
     var _random = Math.random() * 300;
 
     var successCallback = function (e) {
-        console.log("SUCCESSFULLY SENT  - Hi Swapnil !!!");
+        console.log("SUCCESSFULLY SENT");
     };
 
     var errorCallback = function (e) {
         console.log("ERROR MESSAGE ", e);
     };
+    console.log(uuid, topic, data)
     fin.desktop.InterApplicationBus.send(uuid, topic, data, successCallback, errorCallback);
 }
 
@@ -102,18 +106,39 @@ function sendMessage(uuid, topic, data) {
 // }
 
 // Start The Application
-// async function start(symbol) {
-//     return fin.Application.start({
-//         name: 'mph-stock-details-poc-'+symbol,
-//         uuid: 'mph-stock-details-poc-'+symbol,
-//         url: 'http://localhost:8080/components/stock-details/index.html',
-//         autoShow: true,
-//         saveWindowState: true,
-//         maxHeight: 200,
-//         defaultHeight: 200,
-//         minHeight: 200
-//     });
-// }
+async function start(symbol) {
+    return fin.Application.start({
+        name: 'New OpenFin Application',
+        uuid: 'mph-stock-details-poc-'+symbol,
+        url: "http://localhost:8080/components/stock-details/index.html",
+        mainWindowOptions: {
+            name: 'OpenFin Application',
+            autoShow: true,
+            defaultCentered: false,
+            alwaysOnTop: false,
+            saveWindowState: true,
+            icon: "favicon.ico",
+            maxHeight: 600,
+            defaultHeight: 600,
+            minHeight: 600,
+            maxWidth: 1100,
+            minWidth: 1100,
+            defaultWidth: 1100
+        }
+    });
+}
+
+async function createOrBringToFrontOpenFinApplication(symbol) {
+    return start(symbol)
+}
+
+function handleApplication(symbol) {
+    return createOrBringToFrontOpenFinApplication(symbol)
+}
+
+async function open(symbol) {
+    return handleApplication(symbol)
+}
 
 // async function createWin(symbol) {
 //     const app = await fin.Application.start({
@@ -150,11 +175,20 @@ function getLink(params) {
     link.innerHTML = params.value;
     link.href = 'javascript:void(0)'
     link.addEventListener('click', function(){
-        const CHILD_UUID = 'mph-stocks-list-poc-'+params.data.symbol;
-        initNewApp(CHILD_UUID).then(function(value){
-            this.detailsData = params.data;
-            apps.push(value);
-        });
+        // const CHILD_UUID = 'mph-stocks-list-poc-'+params.data.symbol;
+        const symbol = params.data.symbol;
+        open(symbol)
+        .then((app) => {
+            // console.log(params.data)
+            // this.detailsData = params.data;
+            console.log(app, 'Application is running')
+        })
+        .catch(err => console.log(err));
+
+        // initNewApp(CHILD_UUID).then(function(value){
+        //     this.detailsData = params.data;
+        //     apps.push(value);
+        // });
         // const currentApplication = fin.desktop.Application.wrap("mph-stock-details-poc-"+params.data.symbol);
         // currentApplication.isRunning(function (running) {
         //     if (running) {
@@ -251,7 +285,6 @@ let gridOptions = {
     columnDefs: columnDefs,
     enableSorting: true,
     enableColResize: true,
-    rowSelection: 'multiple',
     onGridReady: function (params) {
         params.api.sizeColumnsToFit();
     }
@@ -283,7 +316,9 @@ function initInterApp(){
     console.log("Init with interapp called");
     _interAppMessageField = document.querySelector("#inter-app-message")
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
-        sendMessage(uuid, topic, this.detailsData)
+        sendMessage(uuid, topic, { description: "ALCOA CORP",
+        displaySymbol: "AA",
+        symbol: "AA" })
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
 };

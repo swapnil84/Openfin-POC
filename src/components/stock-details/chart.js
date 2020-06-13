@@ -3,17 +3,16 @@ Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/sam
     // create the chart
 });
 
-
 // var dataUrl = '../../api/aapl-c.json';
 var dataUrl = '../../api/new-intraday.json';
 
 Highcharts.getJSON(dataUrl, function (data) {
-    console.log("dataUrl"+ dataUrl + "Data: " + data[0]);
+    // console.log("dataUrl"+ dataUrl + "Data: " + data[0]);
     showChart(data)
 });
 
 function showChart(data){
-    console.log("Data: " + data[1]);
+    // console.log("Data: " + data[1]);
     // Create the chart
     Highcharts.stockChart('container', {
         // title: {
@@ -22,8 +21,44 @@ function showChart(data){
         // subtitle: {
         //     text: 'Using ordinal X axis'
         // },
+        chart: {
+            height: 300,
+            // borderWidth: 1,
+            // borderColor: '#333333'
+        },
         xAxis: {
-            gapGridLineWidth: 0
+            gapGridLineWidth: 0,
+            plotBands: {
+                borderWidth: 1,
+                borderColor: '#333333'
+            },
+            crosshair: {
+                color: '#cccccc',
+                dashStyle: 'Solid',
+                snap: true,
+                width: 1,
+                zIndex: 2
+            }
+        },
+        yAxis: {
+            plotBands: {
+                borderWidth: 1,
+                borderColor: '#333333'
+            },
+            // left: '30',
+            lineColor: '#cccccc',
+            lineWidth: 1,
+            crosshair: {
+                className:undefined,
+                color: '#cccccc',
+                dashStyle: 'Solid',
+                snap: true,
+                width: 1,
+                zIndex: 2
+            }
+        },
+        scrollbar: {
+            enabled: false,
         },
         rangeSelector: {
             buttons: [
@@ -36,7 +71,13 @@ function showChart(data){
                 type: 'day',
                 count: 1,
                 text: '1D'
-            }, {
+            },
+            {
+                type: '5day',
+                count: 1,
+                text: '5D'
+            }, 
+            {
                 type: '1month',
                 count: 1,
                 text: '1M'
@@ -92,7 +133,10 @@ function showChart(data){
                 ]
             },
             threshold: null
-        }]
+        }],
+        credits: {
+            enabled: false
+        },
     });
 }
 
