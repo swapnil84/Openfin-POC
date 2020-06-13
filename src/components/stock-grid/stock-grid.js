@@ -56,7 +56,7 @@ function initNewApp(CHILD_UUID){
                 autoShow: true,
                 defaultCentered: false,
                 alwaysOnTop: false,
-                saveWindowState: true,
+                saveWindowState: false,
                 icon: "favicon.ico",
                 maxHeight: 600,
                 defaultHeight: 600,
