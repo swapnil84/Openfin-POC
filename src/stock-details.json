@@ -5,11 +5,10 @@
         "uuid": "mph-stock-details-poc",
         "icon": "https://www.mphasis.com/content/dam/mphasis-com/common/icons/favicon.ico",
         "autoShow": true,
-        "saveWindowState": false,
-        "maxHeight": 400,
-        "defaultHeight": 400,
-        "minHeight": 400,
-        "defaultWidth": 600
+        "saveWindowState": true,
+        "maxHeight": 200,
+        "defaultHeight": 200,
+        "minHeight": 200
     },
     "runtime": {
         "arguments": "",

@@ -1,0 +1,57 @@
+body {
+    font-size: 0.85rem !important;
+}
+ul{
+    list-style-type: none;
+    line-height: 30px;
+}
+
+#main-container {
+    padding: 0 25px;
+    margin-top: 20px;
+}
+
+.stock-name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.badge {
+    font-size: inherit;
+}
+
+.price-container {
+    margin: 10px 0;
+}
+
+.price-container .current-price {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.price-container .price-change {
+    font-size: 24px;
+    font-weight: 500;
+    color: #00873c;
+}
+
+.price-container .market-time {
+    font-size: 12px;
+    font-weight: 400;
+    color: #5b636a;
+    margin-top: -7px;
+}
+
+.stock-details ul li {
+    padding: 4px 0;
+}
+
+.bdr-r {
+    border-right: 1px #e0e4e9 solid;
+}
+
+.list-group-item {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+}
