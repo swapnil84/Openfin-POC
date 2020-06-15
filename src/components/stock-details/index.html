@@ -8,15 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="../../lib/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../../assets/main.css">
     <link rel="stylesheet" href="../../assets/common.css">
     <link rel="stylesheet" href="../../assets/chart.css">
     <link rel="stylesheet" href="../../assets/tabs.css">
 
     <script src="../../lib/jquery.min.js"></script>
-    <script src="../../lib/popper.min.js"></script>
-    <script src="../../lib/bootstrap/bootstrap.min.js"></script>
-    <script src="../../ag-grid/ag-grid.min.js"></script>
+    <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../lib/axios.min.js"></script>
 
     <script src="../../lib/highcharts/highstock.js"></script>
@@ -30,10 +27,32 @@
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/stock/modules/export-data.js"></script> -->
     <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
-
+    <style>
+        .loader {
+          border: 16px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 16px solid #3498db;
+          width: 120px;
+          height: 120px;
+          -webkit-animation: spin 2s linear infinite; /* Safari */
+          animation: spin 2s linear infinite;
+        }
+        
+        /* Safari */
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        </style>
  </head>
 <body>
-<div id="main-container" class="container-fluid"> 
+    <!-- <div class="loader" id="loader"></div> -->
+<div id="main-container" class="container-fluid main-wrapper"> 
     <h1 class="stock-name" id="stock-name-wrapper"></h1>
     <div class="price-container">
         <span class="current-price">330.30</span>

@@ -2,12 +2,6 @@ var stockDetails;
 
 const getData = function (url) {
     axios.get(url).then(function (res) {
-        // const listItem = `<ul>
-        //     <li>Previous Close - ${res.data.pc}</li>
-        //     <li>Open - ${res.data.o}</li>
-        //     <li>Day's Range - ${res.data.l} - ${res.data.h}</li>
-        // </ul>`
-        // _stockDetailsWrapper.innerHTML = listItem
         updateDate(res.data);
     })
     .catch(function (error) {
@@ -19,19 +13,21 @@ const getData = function (url) {
 }
 
 const initInterApp = () => {
-  _stockNameWrapper = document.querySelector("#stock-name-wrapper")
+    _stockNameWrapper = document.querySelector("#stock-name-wrapper")
   
-  fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
-      console.log("The application " + uuid + " has subscribed to " + topic);
-  });
+    fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
+        console.log("The application " + uuid + " has subscribed to " + topic);
+    });
 
-  fin.desktop.InterApplicationBus.subscribe("mph-stocks-list-poc",
-      "child-message",
-      function (message, uuid) {
-        const url = 'https://finnhub.io/api/v1/quote?symbol='+message.symbol+'&token=brgslqnrh5r9t6gjebng';
-        getData(url);
-        _stockNameWrapper.innerHTML = message.description+' ('+message.symbol+')';
-      });
+    fin.desktop.InterApplicationBus.subscribe(
+        "mph-stocks-list-poc",
+        "stock-details",
+        function (message, uuid) {
+            const url = 'https://finnhub.io/api/v1/quote?symbol='+message.symbol+'&token=brgslqnrh5r9t6gjebng';
+            getData(url);
+            _stockNameWrapper.innerHTML = message.description+' ('+message.symbol+')';
+        }
+    );
 };
 
 const initNoOpenFin = () => {
