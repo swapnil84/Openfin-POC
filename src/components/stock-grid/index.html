@@ -6,11 +6,18 @@
     <title>Mphasis OpenFin POC</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ag-grid/15.0.0/ag-grid.min.js"></script>
+    <script src="../../lib/ag-grid/ag-grid-community.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../../assets/grid.css">
+    <link rel="stylesheet" href="../../assets/common.css">
 </head>
 <body>
-    <div id="myGrid" style="height: 250px" class="ag-blue"></div>
-    <script src="stock-grid.js"></script>
+    <div class="main-wrapper">
+        <div id="myGrid" style="height: 376px" class="ag-theme-balham"></div>
+    </div>
+    <script type="module" src="stock-grid.js"></script>
+    <script type="module" src="../../js/util.js"></script>
+    <script type="module" src="../../js/configuration.js"></script>
+    <script type="module" src="../../js/messaging.js"></script>
 </body>
 </html>

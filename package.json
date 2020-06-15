@@ -5,6 +5,7 @@
     "stock-grid": "openfin --launch --config src/stock-grid.json",
     "stock-details": "openfin --launch --config src/stock-details.json"
   },
+  "type": "module",
   "devDependencies": {
     "@types/openfin": "latest",
     "hadouken-js-adapter": "latest",

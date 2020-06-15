@@ -1,12 +1,26 @@
 body {
     font-size: 0.85rem !important;
+    padding: 0;
+    margin: 0;
 }
 ul{
     list-style-type: none;
     line-height: 30px;
 }
 
-#main-container {
+a {
+    text-decoration: none;
+    color: #324fe1;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: #324fe1;
+}
+
+.main-wrapper {
     padding: 0 25px;
     margin-top: 20px;
 }
