@@ -1,3 +1,5 @@
+import { STOCKSLIST_WINDOW_UUID } from '../../js/constants.js';
+
 var stockDetails;
 
 const getData = function (url) {
@@ -13,19 +15,19 @@ const getData = function (url) {
 }
 
 const initInterApp = () => {
-    _stockNameWrapper = document.querySelector("#stock-name-wrapper")
+    const _stockNameWrapper = document.querySelector("#stock-name")
   
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
-
     fin.desktop.InterApplicationBus.subscribe(
-        "mph-stocks-list-poc",
-        "stock-details",
+        STOCKSLIST_WINDOW_UUID,
+        fin.me.identity.uuid,
         function (message, uuid) {
-            const url = 'https://finnhub.io/api/v1/quote?symbol='+message.symbol+'&token=brgslqnrh5r9t6gjebng';
-            getData(url);
-            _stockNameWrapper.innerHTML = message.description+' ('+message.symbol+')';
+            // const url = 'https://finnhub.io/api/v1/quote?symbol='+message.symbol+'&token=brgslqnrh5r9t6gjebng';
+            // getData(url);
+            updateData(message);
+            _stockNameWrapper.innerHTML = message.symbol;
         }
     );
 };
@@ -39,7 +41,7 @@ const initWithOpenFin = () => {
 }
 
 function init(){
-    _currentTimeWrapper = document.querySelector("#current-time");
+    const _currentTimeWrapper = document.querySelector("#current-time");
     var today = new Date();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     _currentTimeWrapper.innerHTML = time;
@@ -65,12 +67,12 @@ var data = {
     earningDate: "314.75 - 318.52",
 }
 
-function updateDate(res){
-    document.getElementById("prevClose").innerText = `${res.pc}`;
-    document.getElementById("open").innerText = `${res.o}`;
-    document.getElementById("dayRange").innerText = `${res.l} - ${res.h}`;
+function updateData(res){
+    document.getElementById("prevClose").innerText = `${res.lastPrice}`;
+    // document.getElementById("open").innerText = `${res.o}`;
+    // document.getElementById("dayRange").innerText = `${res.l} - ${res.h}`;
     // document.getElementById("weekRange").innerText = data.weekRange;
-    // document.getElementById("marketCap").innerText = data.marketCap;
+    document.getElementById("marketCap").innerText = `${res.marketCap}`;
     // document.getElementById("beta5YMonthly").innerText = data.beta5YMonthly;
     // document.getElementById("peRatio").innerText = data.peRatio;
     // document.getElementById("eps").innerText = data.eps;

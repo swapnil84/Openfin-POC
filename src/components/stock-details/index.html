@@ -52,115 +52,104 @@
  </head>
 <body>
     <!-- <div class="loader" id="loader"></div> -->
-<div id="main-container" class="container-fluid main-wrapper"> 
-    <h1 class="stock-name" id="stock-name-wrapper"></h1>
-    <div class="price-container">
-        <span class="current-price">330.30</span>
-        <span class="price-change">+1.70 (+0.51%)</span>
-        <div class="market-time">As of <span id="current-time">3:41PM EDT</span>. Market open.</div>
-    </div>
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Summary</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="row stock-details">
-            <div class="col-6 bdr-r">
-                <div class="row">
-                    <div class="col-6">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Previous Close
-                                <span class="badge badge-white badge-pill" id="prevClose">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Open
-                                <span class="badge badge-white badge-pill" id="open">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Bid
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ask
-                                <span class="badge badge-white badge-pill">2</span>
-                            </li> -->
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Day's Range
-                                <span class="badge badge-white badge-pill" id="dayRange">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                52 Week Range
-                                <span class="badge badge-white badge-pill" id="weekRange">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Volume
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Avg. Volume
-                                <span class="badge badge-white badge-pill">14</span>
-                            </li> -->
-                            
-                        </ul>
-                    </div>
-                    <div class="col-6">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Market Cap
-                                <span class="badge badge-white badge-pill" id="marketCap">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Beta (5Y Monthly)
-                                <span class="badge badge-white badge-pill" id="beta5YMonthly">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                PE Ratio (TTM)
-                                <span class="badge badge-white badge-pill" id="peRatio">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                EPS (TTM)
-                                <span class="badge badge-white badge-pill" id="eps">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Earnings Date
-                                <span class="badge badge-white badge-pill" id="earningDate">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Forward Dividend & Yield
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ex-Dividend Date
-                                <span class="badge badge-white badge-pill">14</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                1y Target Est
-                                <span class="badge badge-white badge-pill">2</span>
-                            </li> -->
-                        </ul>
-                    </div>
+<div id="main-container" class="container-fluid main-wrapper">
+
+    <div class="row stock-details">
+        <div class="col-6 bdr-r">
+            <div style="display: flex;">
+                <div class="stock-name-wrapper">
+                    <h1 class="stock-name" id="stock-name">Stock Name</h1>
+                    <span class="market-info">NasdaqGS - NasdaqGS Real Time Price. Currency in USD</span>
                 </div>
             </div>
-            <div class="col-5">
-                <div id="container" style="width: 450px;"></div>
-                <!-- <figure class="highcharts-figure">
-                    <div id="container"></div>
-                </figure> -->
-            </div>
             
+            <div class="price-container">
+                <span class="current-price">330.30</span>
+                <span class="price-change">+1.70 (+0.51%)</span>
+                <div class="market-info">As of <span id="current-time">3:41PM EDT</span>. Market open.</div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Previous Close
+                            <span class="badge badge-white badge-pill" id="prevClose">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Open
+                            <span class="badge badge-white badge-pill" id="open">N/A</span>
+                        </li>
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Bid
+                            <span class="badge badge-white badge-pill">1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ask
+                            <span class="badge badge-white badge-pill">2</span>
+                        </li> -->
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Day's Range
+                            <span class="badge badge-white badge-pill" id="dayRange">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            52 Week Range
+                            <span class="badge badge-white badge-pill" id="weekRange">N/A</span>
+                        </li>
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Volume
+                            <span class="badge badge-white badge-pill">1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Avg. Volume
+                            <span class="badge badge-white badge-pill">14</span>
+                        </li> -->
+                        
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Market Cap
+                            <span class="badge badge-white badge-pill" id="marketCap">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Beta (5Y Monthly)
+                            <span class="badge badge-white badge-pill" id="beta5YMonthly">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            PE Ratio (TTM)
+                            <span class="badge badge-white badge-pill" id="peRatio">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            EPS (TTM)
+                            <span class="badge badge-white badge-pill" id="eps">N/A</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Earnings Date
+                            <span class="badge badge-white badge-pill" id="earningDate">N/A</span>
+                        </li>
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Forward Dividend & Yield
+                            <span class="badge badge-white badge-pill">1</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ex-Dividend Date
+                            <span class="badge badge-white badge-pill">14</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            1y Target Est
+                            <span class="badge badge-white badge-pill">2</span>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+        <div class="col-5">
+            <div id="container" style="width: 400px;"></div>
+        </div>
     </div>
 </div>
 <script src="chart.js"></script>
-<script src="stock-details.js"></script>
-
+<script type="module" src="stock-details.js"></script>
 </body>
 </html>

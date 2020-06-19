@@ -1,39 +1,96 @@
-export function createOpenFinWindow({
+import { STOCKSLIST_WINDOW_UUID } from './constants.js';
+
+async function createAndRunOpenFinWindow({
   name,
   url,
-  windowOptions
+  uuid,
+  windowOptions,
+  winLoc
 }) {
+  const winOptions = {
+    name,
+    url,
+    nonPersistent: true,
+    mainWindowOptions: windowOptions
+  }
   return new Promise((resolve, reject) => {
-    windowOptions.name = name;
-    const window = new fin.desktop.Window(
-      {
-        url,
-        name,
-        ...windowOptions
-      },
-      // () => resolve(window),
-      // reject
+    const win = new fin.desktop.Window(
+      winOptions,
       function() {
-        window.show();
+        const options = {
+          moveIndependently: false
+        }
+        win.showAt(winLoc.left, winLoc.top, options);
       },
       function(error) {
           console.log("Error creating window:", error);
       }
     )
   })
+  // return await fin.Window.create(appOptions);
 }
 
-export function openWindow(provider, name, url) {
-  if (!provider.windowOptions) {
-    console.error(`Error opening app - windowOptions object is missing`)
-    return
-  }
-  if (typeof url === 'undefined') {
-    console.error(`Error opening app - url is missing`)
-    return
-  }
-  return createOpenFinWindow({ name, url, windowOptions: provider.windowOptions })
+// If Window Already Opened Restore It
+async function restoreExistingWindow(existingWindow) {
+  const curState = await existingWindow.getState();
+  await existingWindow.restore();
+  await existingWindow.bringToFront();
 }
+
+export async function getExistingOpenFinWindow(name) {
+  const allWindows = await fin.System.getAllWindows();
+  const currentWindow = await fin.Window.getCurrent();
+  const targetWindow = getCurrentApplication(allWindows, currentWindow)['childWindows'].some(app => {
+    return app.name === name
+  })
+  if (targetWindow) {
+    return fin.Window.wrap({ uuid: STOCKSLIST_WINDOW_UUID, name: name })
+  }
+}
+
+function getCurrentApplication(allWindows, currentWindow) {
+  var curWindow;
+  allWindows.forEach(win => {
+    if (win.uuid === currentWindow.identity.uuid) {
+      curWindow = win
+    }
+  })
+  return curWindow;
+}
+
+export async function createOrBringToFrontOpenFinWindow({
+  name,
+  url,
+  uuid,
+  windowOptions,
+  winLoc
+}) {
+  // const { provider, url, name, uuid } = config
+  const existingWindow = await getExistingOpenFinWindow(name)
+  if (existingWindow) {
+      await restoreExistingWindow(existingWindow)
+      return existingWindow
+  }
+
+  return createAndRunOpenFinWindow({ name, url, uuid, windowOptions, winLoc });  
+}
+
+export function handleWindow(
+  provider,
+  name,
+  uuid,
+  url,
+  winLoc
+) {
+  return createOrBringToFrontOpenFinWindow({
+    name,
+    url,
+    uuid,
+    windowOptions: provider.windowOptions,
+    winLoc
+  })
+}
+
 
 // Get All The Existing Applications
 export async function getExistingOpenFinApplication(uuid) {
@@ -70,15 +127,15 @@ async function createAndRunOpenFinApplication({
     nonPersistent: true,
     mainWindowOptions: windowOptions
   }
-  // return new Promise(function(resolve, reject){
-  //   var SpawnedApplication = new fin.desktop.Application(appOptions, function () {
-  //       // Ensure the spawned application are closed when the main application is closed.
-  //       console.log("running");
-  //       SpawnedApplication.run();
-  //       resolve(SpawnedApplication)
-  //   });
-  // })
-  return await fin.Application.start(appOptions)
+  return new Promise(function(resolve, reject) {
+    var SpawnedApplication = new fin.desktop.Application(appOptions, function () {
+        // Ensure the spawned application are closed when the main application is closed.
+        console.log("running");
+        SpawnedApplication.run();
+        resolve(SpawnedApplication)
+    });
+  })
+  // return await fin.Application.start(appOptions)
 }
 
 export async function createOrBringToFrontOpenFinApplication({
@@ -119,7 +176,7 @@ export function handleApplication(
   })
 }
 
-export async function open(config) {
+export async function open(config, winLoc) {
     const { provider, url, name, uuid } = config
     // Not under openfin -> open as url on browser
     if (typeof fin === 'undefined') {
@@ -139,7 +196,7 @@ export async function open(config) {
     if (provider && provider.platformName === 'openfin') {
       switch (provider.applicationType) {
         case 'window':
-          return openWindow(provider, name, url)
+          return handleWindow(provider, name, uuid, url, winLoc)
         case 'application':
         default:
           return handleApplication(provider, name, uuid, url)
