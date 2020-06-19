@@ -1,5 +1,5 @@
 body {
-    font-size: 0.85rem !important;
+    font-size: 0.80rem !important;
     padding: 0;
     margin: 0;
 }
@@ -21,13 +21,35 @@ a:visited {
 }
 
 .main-wrapper {
-    padding: 0 25px;
-    margin-top: 20px;
+    padding: 0 20px;
+    margin-top: 10px;
+}
+
+.stock-name-wrapper, 
+.watchlist-button {
+    display: inline-block;
+}
+
+.stock-name-wrapper {
+    margin-right: 30px;
+}
+
+.add-to-watchlist {
+    border: 1px #188fff solid;
+    background: none;
+    border-radius: 15px;
+    padding: 5px 20px;
+}
+
+.add-to-watchlist:hover {
+    background-color: #188fff;
+    color: #ffffff;
 }
 
 .stock-name {
     font-size: 18px;
     font-weight: 700;
+    margin: 0;
 }
 
 .badge {
@@ -35,21 +57,21 @@ a:visited {
 }
 
 .price-container {
-    margin: 10px 0;
+    margin: 8px 0;
 }
 
 .price-container .current-price {
-    font-size: 36px;
+    font-size: 30px;
     font-weight: 700;
 }
 
 .price-container .price-change {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     color: #00873c;
 }
 
-.price-container .market-time {
+.market-info {
     font-size: 12px;
     font-weight: 400;
     color: #5b636a;
@@ -57,7 +79,7 @@ a:visited {
 }
 
 .stock-details ul li {
-    padding: 4px 0;
+    padding: 2px 0;
 }
 
 .bdr-r {
