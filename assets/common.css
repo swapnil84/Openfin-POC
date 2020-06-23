@@ -1,9 +1,18 @@
+@font-face {
+    font-family: 'Myriad';
+    src: url('MyriadPro/MyriadPro-Regular.otf') 
+	format('opentype');
+    src: url('MyriadPro/MyriadPro-Regular.ttf') 
+	format('truetype');
+}
+
 body {
     font-size: 0.80rem !important;
     /* font-family: Myriad Pro !important; */
     padding: 0;
     margin: 0;
-    font-family: myriad-pro, sans-serif;
+    /* font-family: myriad-pro, sans-serif; */
+    font-family: 'Myriad', Fallback, sans-serif;
     font-style: normal;
     font-weight: 400
 }
@@ -30,83 +39,22 @@ a:visited {
     margin-top: 10px;
 }
 
-.stock-name-wrapper, 
-.watchlist-button {
-    display: inline-block;
-}
-
-.stock-name-wrapper {
-    margin-right: 30px;
-}
-
-.add-to-watchlist {
-    border: 1px #188fff solid;
-    background: none;
-    border-radius: 15px;
-    padding: 5px 20px;
-}
-
-.add-to-watchlist:hover {
-    background-color: #188fff;
-    color: #ffffff;
-}
-
-.stock-name {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    font-family: myriad-pro, sans-serif;
-}
-
 .badge {
     font-size: inherit;
-}
-
-.price-container {
-    margin: 8px 0;
-}
-
-.price-container .current-price {
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.price-container .price-change {
-    font-size: 20px;
-    font-weight: 500;
-    color: #00873c;
-}
-
-.market-info {
-    font-size: 12px;
-    font-weight: 400;
-    color: #5b636a;
-    margin-top: -7px;
-}
-
-.stock-details ul li {
-    padding: 2px 0;
 }
 
 .bdr-r {
     border-right: 1px #e0e4e9 solid;
 }
 
-.list-group-item {
-    border-top: 0px;
-    border-left: 0px;
-    border-right: 0px;
-}
-
-.list-group {
-    border-radius: 0;
-}
-
-select {
+select, select:focus, select:visited {
     border-radius: 0;
     padding: 5px;
+    background-color: #25262A;
+    color: #fff;
+    border: 1px #fff solid;
+    outline: 0;
 }
-
 
 
 html {
@@ -120,10 +68,6 @@ body, html {
     padding: 15px;
     color: #ffffff;
 }
-.list-group-item {
-    background-color: #25262A;
-    border-bottom-color: #606163;
-}
 
 .align-right {
     text-align: right;
@@ -136,4 +80,12 @@ body, html {
 }
 .mt-30 {
     margin-top: 30px;
+}
+
+button.btn-go {
+    background-color: #4CD2D4;
+    padding: 5px 8px;
+    border: 0;
+    outline: 0;
+    margin-left: 10px;
 }

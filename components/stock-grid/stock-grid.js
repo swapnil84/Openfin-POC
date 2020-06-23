@@ -238,10 +238,42 @@ async function addPlatformView(name, url, data) {
 
 function initInterAppBus(){
     const grid_data = [
-        {"symbol":"AAPL","marketCap":"1490968","change":"7.199999999999989","changePercent":"0","currency":"USD","marketTime":"22:41:59","lastPrice":"342.99"},
-        {"symbol":"JPM","marketCap":"336817.9","change":"1.3799999999999955","changePercent":"0","currency":"USD","marketTime":"22:42:00","lastPrice":"101.25"},
-        {"symbol":"MPHASIS.NS","marketCap":"165380.4","change":"-0.9500000000000455","changePercent":"0","currency":"USD","marketTime":"22:42:02","lastPrice":"857.75"},
-        {"symbol":"Wells","marketCap":"165380.4","change":"-0.9500000000000455","changePercent":"0","currency":"USD","marketTime":"22:42:02","lastPrice":"857.75"}
+        {
+            "symbol":"AAPL",
+            "lastPrice":"342.99",
+            "change":"7.19",
+            "changePercent":"0",
+            "marketTime":"22:41:59",
+            "marketCap":"1490968",
+            "currency":"USD"            
+        },
+        {
+            "symbol":"JPM",
+            "lastPrice":"101.25",
+            "change":"1.38",
+            "changePercent":"0",
+            "marketTime":"22:42:00",
+            "marketCap":"336817.9",
+            "currency":"USD"            
+        },
+        {
+            "symbol":"MPHASIS.NS",
+            "lastPrice":"857.75",
+            "change":"-0.95",
+            "changePercent":"0",
+            "marketTime":"22:42:02",
+            "marketCap":"165380.4",
+            "currency":"USD",
+        },
+        {
+            "symbol":"WFS",
+            "lastPrice":"857.75",
+            "change":"1.80",
+            "changePercent":"0",
+            "marketTime":"22:42:02",
+            "marketCap":"165380.4",
+            "currency":"USD"
+        }
     ]
 
     getGridData(grid_data);

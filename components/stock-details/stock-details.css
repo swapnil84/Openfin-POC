@@ -1,0 +1,58 @@
+.list-group-item {
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    background-color: #25262A;
+    border-bottom-color: #606163;
+}
+
+.list-item-label {
+    color: #ADAEAF;
+}
+
+.list-group {
+    border-radius: 0;
+}
+
+.stock-name-wrapper, 
+.watchlist-button {
+    display: inline-block;
+}
+
+.stock-name-wrapper {
+    margin-right: 30px;
+}
+
+.stock-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    font-family: myriad-pro, sans-serif;
+}
+
+.price-container {
+    margin: 8px 0;
+}
+
+.price-container .current-price {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.price-container .price-change {
+    font-size: 20px;
+    font-weight: 500;
+    color: #00873c;
+    margin-left: 7px;
+}
+
+.market-info {
+    font-size: 12px;
+    font-weight: 400;
+    color: #ADAEAF;
+    margin-top: -7px;
+}
+
+.stock-details ul li {
+    padding: 2px 0;
+}

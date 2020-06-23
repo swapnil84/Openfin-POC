@@ -19,9 +19,10 @@ const initInterAppBus = () => {
             _loader.style.display = 'none';
             _mainContainer.style.display = 'block';
             _stockNameWrapper.innerHTML = message[0].symbol;
-            document.title = message[0].symbol;
             updateData(message[0]);
-            _symbolDropdownWrapper.appendChild(createSelect(message));   
+            _symbolDropdownWrapper.appendChild(createSelect(message));
+            _symbolDropdownWrapper.appendChild(createBtnGo());
+
         }
     );
     fin.desktop.InterApplicationBus.subscribe(
@@ -29,7 +30,6 @@ const initInterAppBus = () => {
         DETAILS_WINDOW_TOPIC_IND,
         function (message, uuid) {
             _stockNameWrapper.innerHTML = message.symbol;
-            document.title = message.symbol;
             document.getElementById('stock-dropdown').value = message.symbol;
             updateData(message);
         }
@@ -48,6 +48,17 @@ const initInterAppBus = () => {
     // );
 };
 
+function createBtnGo() {
+    var buttonGo = document.createElement("button");
+    buttonGo.innerText = 'Go';
+    buttonGo.className = 'btn-go';
+    buttonGo.addEventListener('click', function(e) {
+        changeSymbol(e);
+    })
+
+    return buttonGo;
+}
+
 function createSelect(message) {
     var selectEle = document.createElement("select");
     selectEle.id="stock-dropdown";
@@ -58,9 +69,9 @@ function createSelect(message) {
         selectEle.appendChild(option);
     }
 
-    selectEle.addEventListener('change', function(e) {
-        changeSymbol(e);
-    })
+    // selectEle.addEventListener('change', function(e) {
+    //     changeSymbol(e);
+    // })
     return selectEle;
 }
 

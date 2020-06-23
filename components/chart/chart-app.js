@@ -15,19 +15,29 @@ const initInterApp = () => {
             console.log(message)
             _loader.style.display = 'none';
             _mainContainer.style.display = 'block';
-            document.title = message[0].symbol;
-            _symbolDropdownWrapper.appendChild(createSelect(message)); 
+            _symbolDropdownWrapper.appendChild(createSelect(message));
+            _symbolDropdownWrapper.appendChild(createBtnGo()); 
         }
     );
     fin.desktop.InterApplicationBus.subscribe(
         'MPH_POC_PLTFORM_UUID',
         DETAILS_WINDOW_TOPIC_IND,
         function (message, uuid) {
-            document.title = message.symbol;
             document.getElementById('stock-dropdown').value = message.symbol;
         }
     );
 };
+
+function createBtnGo() {
+    var buttonGo = document.createElement("button");
+    buttonGo.innerText = 'Go';
+    buttonGo.className = 'btn-go';
+    buttonGo.addEventListener('click', function(e) {
+        changeSymbol(e);
+    })
+
+    return buttonGo;
+}
 
 function createSelect(message) {
     var selectEle = document.createElement("select");

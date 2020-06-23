@@ -30,7 +30,7 @@
             "url": "http://localhost:5555/platform-window.html",
             "contextMenu": true,
             "defaultWidth": 1500,
-            "defaultHeight": 900,
+            "defaultHeight": 800,
             "defaultLeft": 0,
             "defaultTop": 0,
             "saveWindowState": false,
@@ -70,44 +70,55 @@
                                     "content": [
                                         {
                                             "type": "component",
-                                            "width": 33.33333333333333,
-                                            "componentName": "view",
-                                            "componentState": {
-                                                "name": "External_Chart_Component",
-                                                "url": "https://cdn.openfin.co/embed-web/chart.html"
-                                            }
-                                        },
-                                        {
-                                            "type": "component",
                                             "componentName": "view",
                                             "componentState": {
                                                 "uuid": "MPH_POC_STOCKLIST_PF_API_VIEWS",
                                                 "name": "Watchlist_Component",
                                                 "url": "http://localhost:5555/components/stock-grid/index.html"
                                             }
+                                        },
+                                        {
+                                            "type": "row",
+                                            "content": [
+                                                {
+                                                    "type": "component",
+                                                    "componentName": "view",
+                                                    "componentState": {
+                                                        "name": "Stock_Component",
+                                                        "url": "http://localhost:5555/components/stock-details/index.html"
+                                                    }                                        
+                                                },
+                                                {
+                                                    "type": "column",
+                                                    "width": 60,
+                                                    "isClosable": false,
+                                                    "content": [
+                                                        {
+                                                            "type": "component",
+                                                            "componentName": "view",
+                                                            "componentState": {
+                                                                "name": "Chart_Component",
+                                                                "url": "http://localhost:5555/components/chart/index.html"
+                                                            }
+                                                        }
+                                                    ]
+                                                }                            
+                                            ]
                                         }
                                     ]
                                 },
                                 {
                                     "type": "column",
-                                    "width": 33,
+                                    "width": 26,
                                     "isClosable": false,
                                     "content": [
                                         {
                                             "type": "component",
                                             "componentName": "view",
                                             "componentState": {
-                                                "name": "Stock_Component",
-                                                "url": "http://localhost:5555/components/stock-details/index.html"
-                                            }                                        
-                                        },
-                                        {
-                                            "type": "component",
-                                            "componentName": "view",
-                                            "componentState": {
-                                                "name": "Chart_Component",
-                                                "url": "http://localhost:5555/components/chart/index.html"
-                                            }                                        
+                                                "name": "External_Chart_Component",
+                                                "url": "https://cdn.openfin.co/embed-web/chart.html"
+                                            }
                                         }
                                     ]
                                 }                                

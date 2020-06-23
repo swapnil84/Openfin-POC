@@ -1,5 +1,18 @@
+@font-face {
+    font-family: 'Myriad';
+    src: url('MyriadPro/MyriadPro-Regular.otf') 
+	format('opentype');
+    src: url('MyriadPro/MyriadPro-Regular.ttf') 
+	format('truetype');
+}
+
 .ag-bl-full-height {
     overflow: hidden;
+}
+
+.ag-theme-balham {
+    font-family: 'Myriad', Fallback, sans-serif;
+    font-weight: 400
 }
 
 .ag-theme-balham .ag-root-wrapper {
