@@ -79,7 +79,9 @@ export function sendToUnNamedMessage(RECEIVERS_UUID, topic, data) {
 }
 
 
-export function publishMessage(data) {
-    var _random = Math.random() * 300;
-    fin.desktop.InterApplicationBus.publish("global-message", data);
+export function publishMessage(topic, data) {
+    console.log(topic, data)
+    // fin.desktop.InterApplicationBus.publish(topic, data);
+    fin.InterApplicationBus.publish(topic, data).then(() => console.log('Published')).catch(err => console.log(err));
+
 }

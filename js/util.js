@@ -127,15 +127,15 @@ async function createAndRunOpenFinApplication({
     nonPersistent: true,
     mainWindowOptions: windowOptions
   }
-  return new Promise(function(resolve, reject) {
-    var SpawnedApplication = new fin.desktop.Application(appOptions, function () {
-        // Ensure the spawned application are closed when the main application is closed.
-        console.log("running");
-        SpawnedApplication.run();
-        resolve(SpawnedApplication)
-    });
-  })
-  // return await fin.Application.start(appOptions)
+  // return new Promise(function(resolve, reject) {
+  //   var SpawnedApplication = new fin.desktop.Application(appOptions, function () {
+  //       // Ensure the spawned application are closed when the main application is closed.
+  //       console.log("running");
+  //       SpawnedApplication.run();
+  //       resolve(SpawnedApplication)
+  //   });
+  // })
+  return await fin.Application.start(appOptions)
 }
 
 export async function createOrBringToFrontOpenFinApplication({

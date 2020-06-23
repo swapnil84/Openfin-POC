@@ -4,17 +4,21 @@
 
 .ag-theme-balham .ag-root-wrapper {
     border: 0;
+    background-color: #2F3338;
 }
 
 .ag-theme-balham .ag-header {
-    background-color: #fff;
-    color: #464e56;
+    background-color: #2F3338;
     border-bottom-color: #e6eaef;
+}
+
+.ag-theme-balham .ag-header-row {
+    color: #4CD2D4;
 }
 
 .ag-theme-balham .symbol-column {
     font-weight: 600;
-    background-color: #fff;
+    /* background-color: #fff; */
 }
 
 .ag-theme-balham .ag-root, 
@@ -41,7 +45,17 @@
     border: 0;
 }
 
+.ag-theme-balham .ag-row {
+    background-color: #2F3338;
+    color: #ffffff;
+}
+
 .ag-theme-balham .ag-row-odd {
+    /* background-color: #f5f5f7; */
+    background-color: #343B40;
+}
+
+:root.light-theme .ag-theme-balham .ag-row-odd {
     background-color: #f5f5f7;
 }
 

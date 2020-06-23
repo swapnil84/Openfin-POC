@@ -1,8 +1,0 @@
-export var DETAILS_WINDOW_UUID = 'MPH_POC_';
-export var DETAILS_WINDOW_TOPIC = 'Topic';
-export var STOCKSLIST_WINDOW_UUID = 'MPH_POC_STOCKLIST';
-export var JAVA_NATIVE_UUID = 'JAVA_NATIVE_UUID';
-export var JAVA_NATIVE_TOPIC = 'JAVA_NATIVE_TOPIC';
-
-export var JAVA_NATIVE_TO_HTML_UUID = 'OpenFinUIAppDemo';
-export var JAVA_NATIVE_TO_HTML_TOPIC = 'strawmanScreenData1';

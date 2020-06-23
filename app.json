@@ -1,0 +1,121 @@
+{
+    "startup_app": null,
+    "runtime": {
+        "arguments": "--v=1 --inspect",
+        "version": "beta"
+    },
+    "shortcut": {
+        "company": "OpenFin",
+        "description": "Platform app seed local",
+        "icon": "https://openfin.github.io/golden-prototype/favicon.ico",
+        "name": "Platform app seed local"
+    },
+    "platform": {
+        "uuid": "MPH_POC_PLTFORM_UUID",
+        "applicationIcon": "https://openfin.github.io/golden-prototype/favicon.ico",
+        "autoShow": false,
+        "providerUrl": "http://localhost:5555/provider.html",
+        "permissions": {
+            "ExternalWindow": {
+              	"wrap": true
+            },
+            "System": {
+                "getAllExternalWindows": true,
+                "launchExternalProcess": true,
+                "readRegistryValue": false,
+                "terminateExternalProcess": true
+            }
+        },
+        "defaultWindowOptions": {
+            "url": "http://localhost:5555/platform-window.html",
+            "contextMenu": true,
+            "defaultWidth": 1500,
+            "defaultHeight": 900,
+            "defaultLeft": 0,
+            "defaultTop": 0,
+            "saveWindowState": false,
+            "backgroundThrottling": true,
+            "minHeight": 445,
+            "minWidth": 354
+        },
+        "defaultViewOptions": {
+            "experimental": {
+                "childWindows": true
+            }
+        },
+        "commands": [
+            {
+                "command": "stack.nextTab",
+                "keys": "Ctrl+Tab"
+            }
+        ]
+    },
+    "services": [
+        {
+          "name": "layouts",
+          "manifestUrl": "https://cdn.openfin.co/services/openfin/layouts/1.2.0/app.json"
+         }
+    ],
+    "snapshot": {
+        "windows": [
+            {
+                "layout": {
+                    "content": [
+                        {
+                            "type": "row",
+                            "id": "no-drop-target",
+                            "content": [
+                                {
+                                    "type": "column",
+                                    "content": [
+                                        {
+                                            "type": "component",
+                                            "width": 33.33333333333333,
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "name": "External_Chart_Component",
+                                                "url": "https://cdn.openfin.co/embed-web/chart.html"
+                                            }
+                                        },
+                                        {
+                                            "type": "component",
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "uuid": "MPH_POC_STOCKLIST_PF_API_VIEWS",
+                                                "name": "Watchlist_Component",
+                                                "url": "http://localhost:5555/components/stock-grid/index.html"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "column",
+                                    "width": 33,
+                                    "isClosable": false,
+                                    "content": [
+                                        {
+                                            "type": "component",
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "name": "Stock_Component",
+                                                "url": "http://localhost:5555/components/stock-details/index.html"
+                                            }                                        
+                                        },
+                                        {
+                                            "type": "component",
+                                            "componentName": "view",
+                                            "componentState": {
+                                                "name": "Chart_Component",
+                                                "url": "http://localhost:5555/components/chart/index.html"
+                                            }                                        
+                                        }
+                                    ]
+                                }                                
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
