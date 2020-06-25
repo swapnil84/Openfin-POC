@@ -7,23 +7,23 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="../../lib/bootstrap/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="../../lib/bootstrap/bootstrap.min.css"> -->
     <link rel="stylesheet" href="../../assets/common.css">
     <link rel="stylesheet" href="../../assets/chart.css">
     <link rel="stylesheet" href="../../assets/loader.css">
   
-    <script src="../../lib/jquery.min.js"></script>
-    <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <!-- <script src="../../lib/jquery.min.js"></script>
+    <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script> -->
     <script src="../../lib/highcharts/highstock.js"></script>
     <script src="../../lib/highcharts/data.js"></script>
  </head>
 <body>
   <div class="loader" id="loader"></div>
-  <div id="dropdown-container" class="mt-10 align-right"></div>
-  <div id="main-container" class="container-fluid main-wrapper">
-      <div id="container" style="width: 400px;"></div>
+  <div id="dropdown-container" class="mt-20"></div>
+  <div id="main-container" class="container-fluid main-wrapper" style="display: none;">
+      <div id="container" style="width: 100%;"></div>
   </div>
   <script type="module" src="chart-app.js"></script>
-  <script src="chart.js"></script>
+  <script type="module" src="chart.js"></script>
 </body>
 </html>

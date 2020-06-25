@@ -32,3 +32,37 @@
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
+
+.highcharts-button .highcharts-button-normal text {
+  color: #4CD2D4 !important;
+  fill: #4CD2D4 !important;
+}
+
+/* .highcharts-button-normal {
+    fill: #000000;
+  }
+  .highcharts-button text {
+      fill: #4edbdb;
+  }
+  
+  .highcharts-button-pressed {
+    fill: #494d52;
+  }  
+  
+  .highcharts-button-pressed text {
+    fill: #ffffff;
+    font-weight: bold;
+  }
+  
+  .highcharts-button-hover {
+    fill: #333333;
+  }
+  
+  .highcharts-button-hover text {
+    fill: #ffffff;
+    font-weight: bold;
+  }
+  
+  .highcharts-background{
+    fill: #25262A;
+  } */

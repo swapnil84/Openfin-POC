@@ -3,7 +3,7 @@
     border-left: 0px;
     border-right: 0px;
     background-color: #25262A;
-    border-bottom-color: #606163;
+    border-bottom-color: #424346;
 }
 
 .list-item-label {
@@ -14,20 +14,10 @@
     border-radius: 0;
 }
 
-.stock-name-wrapper, 
-.watchlist-button {
-    display: inline-block;
-}
-
-.stock-name-wrapper {
-    margin-right: 30px;
-}
-
 .stock-name {
     font-size: 18px;
     font-weight: 700;
     margin: 0;
-    font-family: myriad-pro, sans-serif;
 }
 
 .price-container {

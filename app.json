@@ -79,6 +79,8 @@
                                         },
                                         {
                                             "type": "row",
+                                            "minHeight": 55,
+                                            "height": 55,
                                             "content": [
                                                 {
                                                     "type": "component",

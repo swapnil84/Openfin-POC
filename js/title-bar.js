@@ -35,13 +35,13 @@ class TitleBar extends HTMLElement {
     }
 
     render = async () => {
+        // <div class="button" title="Toggle Theme" id="theme-button" @click=${this.toggleTheme}></div>
+        // <div class="button" title="Toggle Layout Lock" id="lock-button" @click=${this.toggleLockedLayout}></div>
         const titleBar = html`
                 <div class="title-bar-draggable">
                     <div id="title"></div>
                 </div>
                 <div id="buttons-wrapper">
-                    <div class="button" title="Toggle Theme" id="theme-button" @click=${this.toggleTheme}></div>
-                    <div class="button" title="Toggle Layout Lock" id="lock-button" @click=${this.toggleLockedLayout}></div>
                     <div class="button" title="Minimize Window" id="minimize-button" @click=${() => fin.me.minimize().catch(console.error)}></div>
                     <div class="button" title="Maximize Window" id="expand-button" @click=${() => this.maxOrRestore().catch(console.error)}></div>
                     <div class="button" title="Close Window" id="close-button" @click=${() => fin.me.close().catch(console.error)}></div>
