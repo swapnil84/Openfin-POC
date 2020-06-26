@@ -1,18 +1,19 @@
-import { detailsAppConfigs } from '../../js/configuration.js';
-import { open } from '../../js/util.js';
 import { 
     DETAILS_WINDOW_UUID, 
     DETAILS_WINDOW_TOPIC, 
     JAVA_NATIVE_UUID, 
     JAVA_NATIVE_TOPIC,
+    WILDCARD_UUID,
     JAVA_NATIVE_TO_HTML_UUID,
     JAVA_NATIVE_TO_HTML_TOPIC,
-    DETAILS_WINDOW_TOPIC_IND } from '../../js/constants.js';
-import { sendToUnNamedMessage, sendMessage, publishMessage } from '../../js/messaging.js';
+    DETAILS_WINDOW_TOPIC_IND,
+    ENTRYPOINT
+ } from '../../js/constants.js';
+import { sendToUnNamedMessage, publishMessage } from '../../js/messaging.js';
 
 const _loader = document.querySelector("#loader");
 const _mainContainer = document.querySelector("#main-container");
-var detailsData;
+const entryPoint = ENTRYPOINT;
 let gridOptions = {
     rowHeight: 32,
     headerHeight: 40,
@@ -49,34 +50,15 @@ function initStockListWithOpenFin(){
             console.log("UUID: " + process.uuid + ", Application Name: " + process.name);
         });
     });
-    // getGridData();
-    // getRealTimeData();
 }
 
-function handleOpen (detailsAppConfigs, data) {
-    open(detailsAppConfigs)
-      .then(app => {
-        detailsData = data;
-        console.log('Application is running')
-        // if (!opened) return
+function sendMessage(data) {
+    if (entryPoint === 'HTML') {
+        publishMessage(DETAILS_WINDOW_TOPIC_IND, data);
+    } else {
+        publishMessage(JAVA_NATIVE_TOPIC, data.symbol);
+    }
 
-        // const currentApp = opened as Application
-        // currentApp.addListener('closed', () => removeFromOpenedList(app.name))
-        // addToOpenedList(app.name)
-      })
-      .catch(err => {
-        console.warn('Application already opened')
-        // addToOpenedList(app.name)
-      })
-  }
-
-function getStockData(data) {
-    sendToUnNamedMessage(
-        JAVA_NATIVE_UUID, 
-        JAVA_NATIVE_TOPIC, 
-        data.symbol
-    );
-    // ManageOpen(detailsAppConfigs);
 }
 
 function getLink(params) {
@@ -88,7 +70,7 @@ function getLink(params) {
         // detailsAppConfigs.uuid = DETAILS_WINDOW_UUID+symbol;
         // detailsAppConfigs.name = DETAILS_WINDOW_UUID+symbol;
         // getStockData(detailsAppConfigs, params.data)
-        publishMessage(DETAILS_WINDOW_TOPIC_IND, params.data);
+        sendMessage(params.data);
     })
     return link;
 }
@@ -113,6 +95,7 @@ const createColumnDefs = (data) => {
                     return getLink(params)
                 } : undefined,
                 cellClass: e==='symbol' ? 'symbol-column' : undefined,
+                headerClass: e==='symbol' ? 'symbol-header-column' : undefined,
                 // headerCheckboxSelection: e==='symbol' ? true : undefined,
                 // headerCheckboxSelectionFilteredOnly: e==='symbol' ? true: undefined,
                 // checkboxSelection: e==='symbol' ? true : undefined,
@@ -130,17 +113,17 @@ const getGridData = function (data) {
     _mainContainer.style.display = 'block';
     _loader.style.display = 'none';
     setTimeout(() => {
-        // publishMessage(DETAILS_WINDOW_TOPIC, data[0]);
-        sendToUnNamedMessage(
-            'MPH_POC_PLTFORM_UUID', 
-            DETAILS_WINDOW_TOPIC,
-            data
-        );
+        publishMessage(DETAILS_WINDOW_TOPIC, data);
+        // sendToUnNamedMessage(
+        //     'MPH_POC_PLTFORM_UUID', 
+        //     DETAILS_WINDOW_TOPIC,
+        //     data
+        // );
     }, 1000);    
 }
 
 // const getRealTimeData = function() {
-//     const socket = new WebSocket('wss://ws.finnhub.io?token=brfi21vrh5raper7as70');
+//     const socket = new WebSocket('https://finnhub.io/api/v1/forex/rates?base=USD&token=brgslqnrh5r9t6gjebng');
 //     const messages = [
 //         {'type':'subscribe', 'symbol': 'AAPL'},
 //         {'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},
@@ -212,122 +195,57 @@ function detailsSubscribeListner(uuid, topic, data) {
     });
 }
 
-async function addPlatformView(name, url, data) {
-    let windowIdentity;
-    if (fin.me.isWindow) {
-        windowIdentity = fin.me.identity;
-    } else if (fin.me.isView) {
-    windowIdentity = (await fin.me.getCurrentWindow()).identity;
+function initInterAppBus() {
+
+    if (entryPoint === 'HTML') {
+        const grid_data = [
+            {
+                "symbol":"AAPL",
+                "lastPrice":"342.99",
+                "change":"7.19",
+                "changePercent":"0",
+                "marketTime":"22:41:59",
+                "marketCap":"1490968",
+                "currency":"USD"            
+            },
+            {
+                "symbol":"JPM",
+                "lastPrice":"101.25",
+                "change":"1.38",
+                "changePercent":"0",
+                "marketTime":"22:42:00",
+                "marketCap":"336817.9",
+                "currency":"USD"            
+            },
+            {
+                "symbol":"MPHASIS.NS",
+                "lastPrice":"857.75",
+                "change":"-0.95",
+                "changePercent":"0",
+                "marketTime":"22:42:02",
+                "marketCap":"165380.4",
+                "currency":"USD",
+            },
+            {
+                "symbol":"WFS",
+                "lastPrice":"857.75",
+                "change":"1.80",
+                "changePercent":"0",
+                "marketTime":"22:42:02",
+                "marketCap":"165380.4",
+                "currency":"USD"
+            }
+        ]
+        getGridData(grid_data);
     } else {
-        throw new Error('Not running in a platform View or Window');
+        fin.desktop.InterApplicationBus.subscribe(
+            WILDCARD_UUID,
+            JAVA_NATIVE_TO_HTML_TOPIC,
+            function (message, uuid) {
+                // For message format please refer "grid_data" above.
+                getGridData(message);
+            }
+        );
     }
-
-    const platform = fin.Platform.getCurrentSync();
-    console.log(windowIdentity, platform)
-
-    platform.createView({
-        name: name,
-        url: url // The URL of the View
-    }, windowIdentity).then(view => {
-            console.log(view, 'View Created')
-            subcriberAdded();
-            publishMessage(DETAILS_WINDOW_TOPIC, data)
-        } 
-    );
-}
-
-function initInterAppBus(){
-    const grid_data = [
-        {
-            "symbol":"AAPL",
-            "lastPrice":"342.99",
-            "change":"7.19",
-            "changePercent":"0",
-            "marketTime":"22:41:59",
-            "marketCap":"1490968",
-            "currency":"USD"            
-        },
-        {
-            "symbol":"JPM",
-            "lastPrice":"101.25",
-            "change":"1.38",
-            "changePercent":"0",
-            "marketTime":"22:42:00",
-            "marketCap":"336817.9",
-            "currency":"USD"            
-        },
-        {
-            "symbol":"MPHASIS.NS",
-            "lastPrice":"857.75",
-            "change":"-0.95",
-            "changePercent":"0",
-            "marketTime":"22:42:02",
-            "marketCap":"165380.4",
-            "currency":"USD",
-        },
-        {
-            "symbol":"WFS",
-            "lastPrice":"857.75",
-            "change":"1.80",
-            "changePercent":"0",
-            "marketTime":"22:42:02",
-            "marketCap":"165380.4",
-            "currency":"USD"
-        }
-    ]
-
-    getGridData(grid_data);
-
-    // console.log(fin);
-    // fin.View.getCurrent()
-    // .then(view => console.log('current view', view))
-    // .catch(err => console.log(err));
-
-    // fin.View.wrap({ uuid: 'testViewUuid', name: 'testViewName' })
-    // .then(view => console.log('wrapped view', view))
-    // .catch(err => console.log(err));
-
-    // fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
-    //     console.log("The application " + uuid + " has subscribed to " + topic);
-    // });
-
-    // reload().then(() => {
-    //     console.log('Reloaded view', grid_data);
-    //     publishMessage(DETAILS_WINDOW_TOPIC, grid_data[0]);
-    // })
-    // .catch(err => console.log(err));
-    //       const winLoc = {
-    //         left: 300,
-    //         top: 0
-    //     }
-    //     detailsAppConfigs.uuid = DETAILS_WINDOW_UUID;
-    //     detailsAppConfigs.name = DETAILS_WINDOW_UUID;
-    // ManageOpen(detailsAppConfigs, winLoc, grid_data[0])
-
-    // addPlatformView(
-    //     'component_A2', 
-    //     'http://localhost:8083/components/stock-details/index.html',
-    //     grid_data[0]
-    // );
-    // var i = 0;
-    // for (const app of grid_data) {
-    //     const winLoc = {
-    //         left: i,
-    //         top: 0
-    //     }
-    //     detailsAppConfigs.uuid = DETAILS_WINDOW_UUID+app.symbol;
-    //     detailsAppConfigs.name = DETAILS_WINDOW_UUID+app.symbol;
-    //     ManageOpen(detailsAppConfigs, winLoc, app)
-    //     i+=500;
-    // }
-
-
-
-    // fin.desktop.InterApplicationBus.subscribe(
-    //     JAVA_NATIVE_TO_HTML_UUID,
-    //     JAVA_NATIVE_TO_HTML_TOPIC,
-    //     function (message, uuid) {
-    //         getGridData(message);
-    //     }
-    // );
+    
 };

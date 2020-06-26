@@ -1,0 +1,52 @@
+.forex-tile {
+    background-color: #25262A;
+    margin-bottom: 15px;
+    color: #ffffff;
+    padding: 15px;
+}
+
+.currency-wrapper {
+    display: flex;
+}
+
+.currency-wrapper .date{
+    margin-left: auto;
+    order: 2;
+    color: #97989A;
+}
+
+.currency-chart-wrapper {
+    display: flex;
+}
+
+.currency-chart {
+    width: 240px;
+}
+
+.price-container {
+    margin-top: 20px;
+}
+
+.price-wrapper {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.price-wrapper:last-of-type {
+    margin-bottom: 0;
+}
+
+.sell-buy{
+    width: 40px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.sell-buy .label {
+    color: #97989A;
+}
+
+.price {
+    font-size: 42px;
+    line-height: 32px;
+}

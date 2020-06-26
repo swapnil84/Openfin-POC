@@ -3,133 +3,75 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Mphasis OpenFin POC</title>
+    <title>LIVE RATES</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="../../lib/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../../assets/common.css">
+    <link rel="stylesheet" href="../../assets/css/applications/common.css">
+    <link rel="stylesheet" href="forex.css">
     <script src="../../lib/jquery.min.js"></script>
     <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../lib/axios.min.js"></script>
-    <style>
-        .loader {
-          border: 16px solid #f3f3f3;
-          border-radius: 50%;
-          border-top: 16px solid #3498db;
-          width: 120px;
-          height: 120px;
-          -webkit-animation: spin 2s linear infinite; /* Safari */
-          animation: spin 2s linear infinite;
-        }
-        
-        /* Safari */
-        @-webkit-keyframes spin {
-          0% { -webkit-transform: rotate(0deg); }
-          100% { -webkit-transform: rotate(360deg); }
-        }
-        
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        </style>
- </head>
+</head>
 <body>
     <div class="loader" id="loader"></div>
-    <div id="main-container" style="display: none;" class="container-fluid main-wrapper">
+    <div id="main-container" class="container-fluid main-wrapper">
         <div class="row stock-details">
             <div class="col-12">
-                <div style="display: flex;">
-                    <div class="stock-name-wrapper">
-                        <h1 class="stock-name" id="stock-name">Stock Name</h1>
-                        <span class="market-info">NasdaqGS - NasdaqGS Real Time Price. Currency in USD</span>
+                <div class="forex-tile">
+                    <div class="currency-wrapper">
+                        <span class="currency">EUR/USD</span>
+                        <span class="date">SPT(28May)</span>
+                    </div>
+                    <div class="currency-chart-wrapper">
+                        <div class="currency-chart"></div>
+                        <div class="price-container">
+                            <div class="price-wrapper">
+                                <div class="sell-buy">
+                                    <span class="label">SELL</span>
+                                    <span>1.07</span>
+                                </div>
+                                <div class="price">96</div>
+                            </div>
+                            <div class="price-wrapper">
+                                <div class="sell-buy">
+                                    <span class="label">BUY</span>
+                                    <span>1.07</span>
+                                </div>
+                                <div class="price">96</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="price-container">
-                    <span class="current-price">330.30</span>
-                    <span class="price-change">+1.70 (+0.51%)</span>
-                    <div class="market-info">As of <span id="current-time">3:41PM EDT</span>. Market open.</div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Previous Close
-                                <span class="badge badge-white badge-pill" id="prevClose">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Open
-                                <span class="badge badge-white badge-pill" id="open">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Bid
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ask
-                                <span class="badge badge-white badge-pill">2</span>
-                            </li> -->
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Day's Range
-                                <span class="badge badge-white badge-pill" id="dayRange">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                52 Week Range
-                                <span class="badge badge-white badge-pill" id="weekRange">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Volume
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Avg. Volume
-                                <span class="badge badge-white badge-pill">14</span>
-                            </li> -->
-                            
-                        </ul>
+                <div class="forex-tile">
+                    <div class="currency-wrapper">
+                        <span class="currency">USD/JPY</span>
+                        <span class="date">SPT(28May)</span>
                     </div>
-                    <div class="col-6">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Market Cap
-                                <span class="badge badge-white badge-pill" id="marketCap">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Beta (5Y Monthly)
-                                <span class="badge badge-white badge-pill" id="beta5YMonthly">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                PE Ratio (TTM)
-                                <span class="badge badge-white badge-pill" id="peRatio">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                EPS (TTM)
-                                <span class="badge badge-white badge-pill" id="eps">N/A</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Earnings Date
-                                <span class="badge badge-white badge-pill" id="earningDate">N/A</span>
-                            </li>
-                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Forward Dividend & Yield
-                                <span class="badge badge-white badge-pill">1</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Ex-Dividend Date
-                                <span class="badge badge-white badge-pill">14</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                1y Target Est
-                                <span class="badge badge-white badge-pill">2</span>
-                            </li> -->
-                        </ul>
+                    <div class="currency-chart-wrapper">
+                        <div class="currency-chart"></div>
+                        <div class="price-container">
+                            <div class="price-wrapper">
+                                <div class="sell-buy">
+                                    <span class="label">SELL</span>
+                                    <span>1.07</span>
+                                </div>
+                                <div class="price">96</div>
+                            </div>
+                            <div class="price-wrapper">
+                                <div class="sell-buy">
+                                    <span class="label">BUY</span>
+                                    <span>1.07</span>
+                                </div>
+                                <div class="price">96</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<script type="module" src="stock-details.js"></script>
+<script type="module" src="forex.js"></script>
 </body>
 </html>

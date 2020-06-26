@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Myriad';
-    src: url('../assets/MyriadPro/MyriadPro-Regular.otf') 
+    src: url('../../fonts/MyriadPro-Regular.otf') 
 	format('opentype');
-    src: url('../assets/MyriadPro/MyriadPro-Regular.ttf') 
+    src: url('../../fonts/MyriadPro-Regular.ttf') 
 	format('truetype');
 }
 

@@ -1,6 +1,6 @@
 import { STOCKSLIST_WINDOW_UUID } from '../../js/constants.js';
 
-const initInterApp = () => { 
+const initInterAppBus = () => {
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
@@ -11,6 +11,7 @@ const initInterApp = () => {
             console.log(message)
         }
     );
+    
 };
 
 const initNoOpenFin = () => {
@@ -18,7 +19,7 @@ const initNoOpenFin = () => {
 }
 
 const initWithOpenFin = () => {
-    initInterApp();
+    initInterAppBus();
 }
 
 function init(){

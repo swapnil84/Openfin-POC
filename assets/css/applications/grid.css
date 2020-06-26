@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Myriad';
-    src: url('MyriadPro/MyriadPro-Regular.otf') 
+    src: url('../../fonts/MyriadPro-Regular.otf') 
 	format('opentype');
-    src: url('MyriadPro/MyriadPro-Regular.ttf') 
+    src: url('../../fonts/MyriadPro-Regular.ttf') 
 	format('truetype');
 }
 
@@ -28,7 +28,15 @@
 
 .ag-theme-balham .symbol-column {
     font-weight: 600;
-    background-color: #fff;
+    background-color: #2D3337 !important;
+}
+
+.ag-theme-balham .symbol-column.ag-cell + .ag-cell,
+.ag-theme-balham .symbol-header-column.ag-header-cell + .ag-header-cell {
+    background-image: url('../../shadow-bg.png');
+    background-repeat: repeat-y;
+    background-position: left;
+    background-size: 8px;
 }
 
 .ag-theme-balham .ag-root, 
@@ -64,13 +72,20 @@
     border-bottom: 1px #e6eaef solid;
 }
 
-.ag-theme-balham .ag-row-hover, 
+/* .ag-theme-balham .ag-row-hover, 
 .ag-theme-balham .ag-row-hover .symbol-column, 
 .ag-theme-balham .ag-row-selected, 
 .ag-theme-balham .ag-row-selected .symbol-column {
     background-color: #e0f0ff;
     border-bottom-color: #c7e2fe;
 }
+
+.ag-theme-balham .ag-row-hover, 
+.ag-theme-balham .ag-row-hover .symbol-column, 
+.ag-theme-balham .ag-row-selected, 
+.ag-theme-balham .ag-row-selected .symbol-column {
+    border-bottom-color: #606163;
+} */
 
 .ag-theme-balham .ag-icon-checkbox-unchecked,
 .ag-theme-balham .ag-icon-checkbox-checked,
@@ -120,15 +135,9 @@
 .ag-theme-balham .ag-row-odd {
     background-color: #343B40;
 }
-.ag-theme-balham .symbol-column {
+/* .ag-theme-balham .symbol-column {
     background-color: unset !important;
-}
-.ag-theme-balham .ag-row-hover, 
-.ag-theme-balham .ag-row-hover .symbol-column, 
-.ag-theme-balham .ag-row-selected, 
-.ag-theme-balham .ag-row-selected .symbol-column {
-    border-bottom-color: #606163;
-}
+} */
 
 .ag-center-cols-viewport {
     overflow: hidden;

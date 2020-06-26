@@ -1,20 +1,32 @@
 @font-face {
     font-family: 'Myriad';
-    src: url('MyriadPro/MyriadPro-Regular.otf') 
+    src: url('../../fonts/MyriadPro-Regular.otf') 
 	format('opentype');
-    src: url('MyriadPro/MyriadPro-Regular.ttf') 
+    src: url('../../fonts/MyriadPro-Regular.ttf') 
 	format('truetype');
 }
 
 body {
     font-size: 0.80rem !important;
-    /* font-family: Myriad Pro !important; */
     padding: 0;
     margin: 0;
-    /* font-family: myriad-pro, sans-serif; */
     font-family: 'Myriad', Fallback, sans-serif;
     font-style: normal;
     font-weight: 400
+}
+
+html {
+    padding: 0 15px;
+}
+
+body, html {
+    background-color: #2F3338;
+}
+
+.content-wrapper {
+    background-color: #25262A;
+    padding: 15px;
+    color: #ffffff;
 }
 
 ul{
@@ -56,19 +68,6 @@ select, select:focus, select:visited {
     outline: 0;
     font-size: 13px;
     font-family: 'Myriad', Fallback, sans-serif;
-}
-
-
-html {
-    padding: 0 15px;
-}
-body, html {
-    background-color: #2F3338;
-}
-.content-wrapper {
-    background-color: #25262A;
-    padding: 15px;
-    color: #ffffff;
 }
 
 .align-right {

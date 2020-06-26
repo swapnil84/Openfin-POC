@@ -79,6 +79,7 @@
                                         },
                                         {
                                             "type": "row",
+                                            "defaultHeight": 55,
                                             "minHeight": 55,
                                             "height": 55,
                                             "content": [
@@ -92,8 +93,9 @@
                                                 },
                                                 {
                                                     "type": "column",
+                                                    "defaultWidth": 60,
+                                                    "minWidth": 60,
                                                     "width": 60,
-                                                    "isClosable": false,
                                                     "content": [
                                                         {
                                                             "type": "component",
@@ -111,15 +113,16 @@
                                 },
                                 {
                                     "type": "column",
+                                    "defaultWidth": 26,
+                                    "minWidth": 26,
                                     "width": 26,
-                                    "isClosable": false,
                                     "content": [
                                         {
                                             "type": "component",
                                             "componentName": "view",
                                             "componentState": {
-                                                "name": "External_Chart_Component",
-                                                "url": "https://cdn.openfin.co/embed-web/chart.html"
+                                                "name": "Forex_Component",
+                                                "url": "http://localhost:5555/components/forex/index.html"
                                             }
                                         }
                                     ]
