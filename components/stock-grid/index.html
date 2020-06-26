@@ -17,7 +17,8 @@
     <div class="main-wrapper mt-30" id="main-container" style="display: none;">
         <div id="myGrid" style="height:250px" class="ag-theme-balham"></div>
     </div>
-    <script type="module" src="stock-grid.js"></script>
+    <!-- <script type="module" src="stock-grid.js"></script> -->
+    <script>document.write("<script type='module' src='stock-grid.js?v='" + Date.now() + "'><\/script>");</script>
     <script type="module" src="../../js/util.js"></script>
     <script type="module" src="../../js/configuration.js"></script>
     <script type="module" src="../../js/messaging.js"></script>

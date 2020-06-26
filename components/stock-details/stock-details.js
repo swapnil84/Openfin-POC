@@ -3,8 +3,13 @@ import {
     DETAILS_WINDOW_TOPIC, 
     DETAILS_WINDOW_TOPIC_IND,
     JAVA_NATIVE_TO_HTML_TOPIC__DETAILS,
-    ENTRYPOINT
+    ENTRYPOINT,
+    WILDCARD_UUID,
+    TOPIC__DROPDOWN,
+    TOPIC__SYMBOL_CHANGE,
+    JAVA_NATIVE_TOPIC
 } from '../../js/constants.js';
+import { publishMessage } from '../../js/messaging.js';
 
 const entryPoint = ENTRYPOINT;
 const _loader = document.querySelector("#loader");
@@ -17,56 +22,71 @@ const initInterAppBus = () => {
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
-    // Default Subscriber When Coming from Watchlist
+    // Subscriber To Get List of Stock For Dropdown from Grid window
     fin.desktop.InterApplicationBus.subscribe(
         'MPH_POC_PLTFORM_UUID',
-        DETAILS_WINDOW_TOPIC,
+        TOPIC__DROPDOWN,
         function (message, uuid) {
-            console.log(message)
-            _loader.style.display = 'none';
-            _mainContainer.style.display = 'block';
-            _stockNameWrapper.innerHTML = message[0].symbol;
-            console.log(hasDropDown)
-            updateData(message[0]);
-            if (!hasDropDown) {
-                _symbolDropdownWrapper.appendChild(createSelect(message));
-                _symbolDropdownWrapper.appendChild(createBtnGo());
-            }
+            createDropdownComponent(message);
+        }
+    );
+    fin.desktop.InterApplicationBus.subscribe(
+        'MPH_POC_PLTFORM_UUID',
+        TOPIC__SYMBOL_CHANGE,
+        function (message, uuid) {
+            document.getElementById('stock-dropdown').value = message;
         }
     );
     if (entryPoint === 'HTML') {
-        // Data will be published from GRID page after grid link onclick
+        // Data will be published from Grid window on load
+        fin.desktop.InterApplicationBus.subscribe(
+            'MPH_POC_PLTFORM_UUID',
+            TOPIC__DROPDOWN,
+            function (message, uuid) {
+                _loader.style.display = 'none';
+                _mainContainer.style.display = 'block';
+                _stockNameWrapper.innerHTML = message[0].symbol;
+                updateData(message[0]);
+            }
+        );
+        // Data will be published from Grid window on link click
         fin.desktop.InterApplicationBus.subscribe(
             'MPH_POC_PLTFORM_UUID',
             DETAILS_WINDOW_TOPIC_IND,
             function (message, uuid) {
+                _loader.style.display = 'none';
+                _mainContainer.style.display = 'block';
                 _stockNameWrapper.innerHTML = message.symbol;
                 document.getElementById('stock-dropdown').value = message.symbol;
                 updateData(message);
             }
         );
     } else {
-        //Data will be published from JAVA after receiving symbol from Grid link onclick
-        fin.desktop.InterApplicationBus.subscribe(
-            '*',
-            JAVA_NATIVE_TO_HTML_TOPIC__DETAILS,
-            function (message, uuid) {
-                console.log(message)
-                _loader.style.display = 'none';
-                _mainContainer.style.display = 'block';
-                _stockNameWrapper.innerHTML = message.symbol;
-                updateData(message);
-            }
-        );
+        //Data will be published from JAVA Onload as well as after receiving symbol from Grid link click
+        subscribeToJavaData();
     }
 };
+
+function subscribeToJavaData() {
+    fin.desktop.InterApplicationBus.subscribe(
+        WILDCARD_UUID,
+        JAVA_NATIVE_TO_HTML_TOPIC__DETAILS,
+        function (message, uuid) {
+            console.log(message)
+            _loader.style.display = 'none';
+            _mainContainer.style.display = 'block';
+            _stockNameWrapper.innerHTML = message.symbol;
+            updateData(message);
+        }
+    );
+}
 
 function createBtnGo() {
     var buttonGo = document.createElement("button");
     buttonGo.innerText = 'Go';
     buttonGo.className = 'btn-go';
     buttonGo.addEventListener('click', function(e) {
-        changeSymbol(e);
+        changeSymbol();
     })
 
     return buttonGo;
@@ -85,8 +105,17 @@ function createSelect(message) {
     return selectEle;
 }
 
-function changeSymbol(e) {
-    console.log(e.target.value)
+function createDropdownComponent(message) {
+    if (_symbolDropdownWrapper.childNodes.length === 0) {
+        _symbolDropdownWrapper.appendChild(createSelect(message));
+        _symbolDropdownWrapper.appendChild(createBtnGo());
+    }
+}
+
+function changeSymbol() {
+    const ddValue = document.getElementById('stock-dropdown').value;
+    publishMessage(TOPIC__SYMBOL_CHANGE, ddValue);
+    publishMessage(JAVA_NATIVE_TOPIC, ddValue);
 }
 
 const initNoOpenFin = () => {

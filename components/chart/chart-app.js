@@ -3,8 +3,12 @@ import {
     DETAILS_WINDOW_TOPIC_IND, 
     JAVA_NATIVE_TOPIC,
     JAVA_NATIVE_TO_HTML_TOPIC__CHART,
+    WILDCARD_UUID,
+    TOPIC__DROPDOWN,
+    TOPIC__SYMBOL_CHANGE,
     ENTRYPOINT
 } from '../../js/constants.js';
+import { publishMessage } from '../../js/messaging.js';
 import { showChart } from './chart.js';
 
 const entryPoint = ENTRYPOINT;
@@ -17,23 +21,28 @@ const initInterApp = () => {
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
+    // Subscriber To Get List of Stock For Dropdown from Grid window
+    fin.desktop.InterApplicationBus.subscribe(
+        'MPH_POC_PLTFORM_UUID',
+        TOPIC__DROPDOWN,
+        function (message, uuid) {
+            _loader.style.display = 'none';
+            _mainContainer.style.display = 'block';
+            createDropdownComponent(message);
+        }
+    );
+    fin.desktop.InterApplicationBus.subscribe(
+        'MPH_POC_PLTFORM_UUID',
+        TOPIC__SYMBOL_CHANGE,
+        function (message, uuid) {
+            document.getElementById('stock-dropdown').value = message;
+        }
+    );
     if (entryPoint === 'HTML') {
-        // Data will published from GRID page on initialization. Chart data will come from JSON file.
-        fin.desktop.InterApplicationBus.subscribe(
-            'MPH_POC_PLTFORM_UUID',
-            DETAILS_WINDOW_TOPIC,
-            function (message, uuid) {
-                console.log(message)
-                _symbolDropdownWrapper.appendChild(createSelect(message));
-                _symbolDropdownWrapper.appendChild(createBtnGo());
-                Highcharts.getJSON(chartDataUrl, function (data) {
-                    _loader.style.display = 'none';
-                    _mainContainer.style.display = 'block';
-                    showChart(data)
-                });
-            }
-        );
-         // Data will be published from GRID page after grid link onclick
+        Highcharts.getJSON(chartDataUrl, function (data) {
+            showChart(data)
+        });
+         // Data will be published from Grid window after grid link click
          fin.desktop.InterApplicationBus.subscribe(
             'MPH_POC_PLTFORM_UUID',
             DETAILS_WINDOW_TOPIC_IND,
@@ -43,25 +52,30 @@ const initInterApp = () => {
         );
     } else {
         // Data will published from JAVA
-        fin.desktop.InterApplicationBus.subscribe(
-            '*',
-            JAVA_NATIVE_TO_HTML_TOPIC__CHART,
-            function (message, uuid) {
-                _loader.style.display = 'none';
-                _mainContainer.style.display = 'block';
-                // For message format, please refer "new-infraday.json" inside api folder at root level
-                showChart(message)
-            }
-        );
+        subscribeToJavaData();
     }
 };
+
+function subscribeToJavaData() {
+    fin.desktop.InterApplicationBus.subscribe(
+        WILDCARD_UUID,
+        JAVA_NATIVE_TO_HTML_TOPIC__CHART,
+        function (message, uuid) {
+            console.log(message)
+            _loader.style.display = 'none';
+            _mainContainer.style.display = 'block';
+            // For message format, please refer "new-infraday.json" inside api folder at root level
+            showChart(message)
+        }
+    );
+}
 
 function createBtnGo() {
     var buttonGo = document.createElement("button");
     buttonGo.innerText = 'Go';
     buttonGo.className = 'btn-go';
     buttonGo.addEventListener('click', function(e) {
-        changeSymbol(e);
+        changeSymbol();
     })
 
     return buttonGo;
@@ -78,6 +92,19 @@ function createSelect(message) {
     }
 
     return selectEle;
+}
+
+function createDropdownComponent(message) {
+    if (_symbolDropdownWrapper.childNodes.length === 0) {
+        _symbolDropdownWrapper.appendChild(createSelect(message));
+        _symbolDropdownWrapper.appendChild(createBtnGo());
+    }
+}
+
+function changeSymbol() {
+    const ddValue = document.getElementById('stock-dropdown').value;
+    publishMessage(TOPIC__SYMBOL_CHANGE, ddValue);
+    publishMessage(JAVA_NATIVE_TOPIC, ddValue);
 }
 
 const initNoOpenFin = () => {

@@ -28,7 +28,11 @@
 
 .ag-theme-balham .symbol-column {
     font-weight: 600;
-    background-color: #2D3337 !important;
+    background-color: #222222c2 !important;
+}
+
+.ag-theme-balham .symbol-header-column {
+    background-color: #222222c2 !important;
 }
 
 .ag-theme-balham .symbol-column.ag-cell + .ag-cell,
@@ -37,6 +41,10 @@
     background-repeat: repeat-y;
     background-position: left;
     background-size: 8px;
+}
+
+.ag-theme-balham .symbol-header-column.ag-header-cell + .ag-header-cell {
+    background-position: 1px;
 }
 
 .ag-theme-balham .ag-root, 

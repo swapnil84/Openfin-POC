@@ -1,5 +1,4 @@
 export function showChart(data) {
-    console.log(data)
     // console.log("Data: " + data[1]);
     // Create the chart
     Highcharts.stockChart('container', {

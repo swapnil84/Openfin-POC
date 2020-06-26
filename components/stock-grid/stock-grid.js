@@ -7,7 +7,8 @@ import {
     JAVA_NATIVE_TO_HTML_UUID,
     JAVA_NATIVE_TO_HTML_TOPIC,
     DETAILS_WINDOW_TOPIC_IND,
-    ENTRYPOINT
+    ENTRYPOINT,
+    TOPIC__DROPDOWN
  } from '../../js/constants.js';
 import { sendToUnNamedMessage, publishMessage } from '../../js/messaging.js';
 
@@ -66,10 +67,6 @@ function getLink(params) {
     link.innerHTML = params.value;
     link.href = 'javascript:void(0)'
     link.addEventListener('click', function(){
-        // const symbol = params.data.symbol;
-        // detailsAppConfigs.uuid = DETAILS_WINDOW_UUID+symbol;
-        // detailsAppConfigs.name = DETAILS_WINDOW_UUID+symbol;
-        // getStockData(detailsAppConfigs, params.data)
         sendMessage(params.data);
     })
     return link;
@@ -113,12 +110,7 @@ const getGridData = function (data) {
     _mainContainer.style.display = 'block';
     _loader.style.display = 'none';
     setTimeout(() => {
-        publishMessage(DETAILS_WINDOW_TOPIC, data);
-        // sendToUnNamedMessage(
-        //     'MPH_POC_PLTFORM_UUID', 
-        //     DETAILS_WINDOW_TOPIC,
-        //     data
-        // );
+        publishMessage(TOPIC__DROPDOWN, data);
     }, 1000);    
 }
 
@@ -160,43 +152,41 @@ function initNoOpenFin(){
     alert("OpenFin is not available - you are probably running in a browser.");
 }
 
-function ManageOpen(appConfig, winLoc, data) {
-    open(appConfig, winLoc)
-    .then(app => {
-        // detailsData = data;        
-        const DETAILS_UUID = DETAILS_WINDOW_UUID+data.symbol
-        const DETAILS_TOPIC = DETAILS_UUID;
-        detailsSubscribeListner(DETAILS_UUID, DETAILS_TOPIC, data)
-        console.log('Application is running')
-    // if (!opened) return
+// function ManageOpen(appConfig, winLoc, data) {
+//     open(appConfig, winLoc)
+//     .then(app => {
+//         // detailsData = data;        
+//         const DETAILS_UUID = DETAILS_WINDOW_UUID+data.symbol
+//         const DETAILS_TOPIC = DETAILS_UUID;
+//         detailsSubscribeListner(DETAILS_UUID, DETAILS_TOPIC, data)
+//         console.log('Application is running')
+//     // if (!opened) return
 
-    // const currentApp = opened as Application
-    // currentApp.addListener('closed', () => removeFromOpenedList(app.name))
-    // addToOpenedList(app.name)
-    })
-    .catch(err => {
-        console.warn('Application already opened')
-    // addToOpenedList(app.name)
-    })
-}
+//     // const currentApp = opened as Application
+//     // currentApp.addListener('closed', () => removeFromOpenedList(app.name))
+//     // addToOpenedList(app.name)
+//     })
+//     .catch(err => {
+//         console.warn('Application already opened')
+//     // addToOpenedList(app.name)
+//     })
+// }
 
-
-function detailsSubscribeListner(uuid, topic, data) {
-    const DETAILS_PAGE_UUID = uuid;
-    const DETAILS_PAGE_TOPIC = topic;
-    const DETAILS_DATA = data;
-    fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
-        sendToUnNamedMessage(
-            DETAILS_PAGE_UUID, 
-            DETAILS_PAGE_TOPIC, 
-            DETAILS_DATA
-        );
-        console.log("The application " + uuid + " has subscribed to " + topic);
-    });
-}
+// function detailsSubscribeListner(uuid, topic, data) {
+//     const DETAILS_PAGE_UUID = uuid;
+//     const DETAILS_PAGE_TOPIC = topic;
+//     const DETAILS_DATA = data;
+//     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
+//         sendToUnNamedMessage(
+//             DETAILS_PAGE_UUID, 
+//             DETAILS_PAGE_TOPIC, 
+//             DETAILS_DATA
+//         );
+//         console.log("The application " + uuid + " has subscribed to " + topic);
+//     });
+// }
 
 function initInterAppBus() {
-
     if (entryPoint === 'HTML') {
         const grid_data = [
             {
@@ -238,14 +228,17 @@ function initInterAppBus() {
         ]
         getGridData(grid_data);
     } else {
-        fin.desktop.InterApplicationBus.subscribe(
-            WILDCARD_UUID,
-            JAVA_NATIVE_TO_HTML_TOPIC,
-            function (message, uuid) {
-                // For message format please refer "grid_data" above.
-                getGridData(message);
-            }
-        );
+        subscribeToJavaData()
     }
-    
 };
+
+function subscribeToJavaData() {
+    fin.desktop.InterApplicationBus.subscribe(
+        WILDCARD_UUID,
+        JAVA_NATIVE_TO_HTML_TOPIC,
+        function (message, uuid) {
+            // For message format please refer "grid_data" above.
+            getGridData(message);
+        }
+    );
+}
