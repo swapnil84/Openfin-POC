@@ -1,8 +1,11 @@
 .forex-tile {
     background-color: #25262A;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    margin-right: 10px;
     color: #ffffff;
     padding: 15px;
+    max-width: 375px;
+    display: inline-block;
 }
 
 .currency-wrapper {
@@ -37,7 +40,7 @@
 }
 
 .sell-buy{
-    width: 40px;
+    width: 29px;
     text-align: center;
     font-size: 12px;
 }
@@ -49,4 +52,34 @@
 .price {
     font-size: 42px;
     line-height: 32px;
+}
+
+.up-down-indicator {
+    padding: 0 15px 0 10px;
+    display: flex;
+}
+
+.up-down-indicator span {
+    align-self: center;
+    position: relative;
+}
+
+.up-down-indicator span.down::after, 
+.up-down-indicator span.up::after {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: 22px;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #ee5858;
+    clear: both;
+}
+
+.up-down-indicator span.up::after {
+    top: -10px;
+    border-top: 0;
+    border-bottom: 7px solid #23a457;
 }

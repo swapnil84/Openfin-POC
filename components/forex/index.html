@@ -13,64 +13,14 @@
     <script src="../../lib/jquery.min.js"></script>
     <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../lib/axios.min.js"></script>
+    <script src="../../lib/highcharts/highstock.js"></script>
+    <script src="../../lib/highcharts/data.js"></script>
+    <script type="module" src="currency-tile.js"></script>
 </head>
 <body>
     <div class="loader" id="loader"></div>
     <div id="main-container" class="container-fluid main-wrapper">
-        <div class="row stock-details">
-            <div class="col-12">
-                <div class="forex-tile">
-                    <div class="currency-wrapper">
-                        <span class="currency">EUR/USD</span>
-                        <span class="date">SPT(28May)</span>
-                    </div>
-                    <div class="currency-chart-wrapper">
-                        <div class="currency-chart"></div>
-                        <div class="price-container">
-                            <div class="price-wrapper">
-                                <div class="sell-buy">
-                                    <span class="label">SELL</span>
-                                    <span>1.07</span>
-                                </div>
-                                <div class="price">96</div>
-                            </div>
-                            <div class="price-wrapper">
-                                <div class="sell-buy">
-                                    <span class="label">BUY</span>
-                                    <span>1.07</span>
-                                </div>
-                                <div class="price">96</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="forex-tile">
-                    <div class="currency-wrapper">
-                        <span class="currency">USD/JPY</span>
-                        <span class="date">SPT(28May)</span>
-                    </div>
-                    <div class="currency-chart-wrapper">
-                        <div class="currency-chart"></div>
-                        <div class="price-container">
-                            <div class="price-wrapper">
-                                <div class="sell-buy">
-                                    <span class="label">SELL</span>
-                                    <span>1.07</span>
-                                </div>
-                                <div class="price">96</div>
-                            </div>
-                            <div class="price-wrapper">
-                                <div class="sell-buy">
-                                    <span class="label">BUY</span>
-                                    <span>1.07</span>
-                                </div>
-                                <div class="price">96</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <currency-tile></currency-tile>
     </div>
 <script type="module" src="forex.js"></script>
 </body>

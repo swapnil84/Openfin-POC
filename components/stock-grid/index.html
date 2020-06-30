@@ -14,8 +14,20 @@
 </head>
 <body>
     <div class="loader" id="loader"></div>
-    <div class="main-wrapper mt-30" id="main-container" style="display: none;">
-        <div id="myGrid" style="height:250px" class="ag-theme-balham"></div>
+    <div class="main-wrapper mt-20" id="main-container" style="display: none;">
+        <div class="mb-15 d-flex">
+            <div>
+                <span id="add-symbol-container">
+                    <input type="text" class="h18" placeholder="Add Symbol(s)" />
+                    <button class="btn-second">ADD</button>
+                </span>
+                <button id="add-group-button" class="btn-prime">ADD GROUP</button>
+            </div>
+            <div id="stock-filter">
+                <span class="filter-icon"><image src="../../assets/filter-icon.gif" /></span><input type="text" class="h18" id="grid-external-filter" />
+            </div>
+        </div>
+        <div id="myGrid" style="height:220px" class="ag-theme-balham"></div>
     </div>
     <!-- <script type="module" src="stock-grid.js"></script> -->
     <script>document.write("<script type='module' src='stock-grid.js?v='" + Date.now() + "'><\/script>");</script>

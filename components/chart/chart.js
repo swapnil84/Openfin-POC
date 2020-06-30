@@ -1,6 +1,11 @@
 export function showChart(data) {
     // console.log("Data: " + data[1]);
     // Create the chart
+    Highcharts.setOptions({
+        lang:{
+            rangeSelectorZoom: ''
+        }
+    });
     Highcharts.stockChart('container', {
         // title: {
         //     text: 'AAPL stock price by minute'
@@ -25,7 +30,7 @@ export function showChart(data) {
                     color: '#E0E0E3'
                 }
             },
-            lineColor: '#153259',
+            lineColor: '#153156',
             minorGridLineColor: '#505053',
             tickColor: '#424346',
             title: {
@@ -114,17 +119,12 @@ export function showChart(data) {
             style: {
                 color: '#707073'
             }
-        },
-        
+        },        
         rangeSelector: {
             buttons: [{
                 type: 'day',
                 count: 1,
                 text: '1D'
-            }, {
-                type: 'all',
-                count: 1,
-                text: 'All'
             }],
             buttonTheme: {
                 fill: 'none',
@@ -190,7 +190,7 @@ export function showChart(data) {
             //     type: 'all',
             //     text: 'MAX'
             // }],
-            selected: 1,
+            selected: 0,
             inputEnabled: false
         },
         navigator: {
@@ -218,12 +218,15 @@ export function showChart(data) {
                     x2: 0,
                     y2: 1
                 },
+                // stops: [
+                //     [1, '#11407F'],
+                //     [1, '#283B53']
+                // ]
                 stops: [
-                    [1, '#11407F'],
-                    [1, '#283B53']
+                    [0, '#11407F'],
+                    [1, Highcharts.color('#11407F').setOpacity(0).get('rgba')]
                 ]
             },
-            opacity: 0.6,
             threshold: null
         }],
         credits: {

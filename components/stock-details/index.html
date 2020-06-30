@@ -16,9 +16,9 @@
 <body>
 <div class="loader" id="loader"></div>
 <div id="dropdown-container" class="mt-20"></div>
-<div id="main-container" style="display: none;" class="container-fluid content-wrapper mt-10">
-    <div class="row stock-details">
-        <div class="col-12">
+<div id="main-container" style="display: none;" class="container-fluid mt-10">
+    <div class="row stock-details content-wrapper">
+        <div class="col-12 p-0">
             <div class="stock-name-wrapper">
                 <h1 class="stock-name" id="stock-name">Stock Name</h1>
                 <span class="market-info">NasdaqGS - NasdaqGS Real Time Price. Currency in USD</span>
@@ -102,6 +102,15 @@
                         </li> -->
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="sell-short-container">
+        <div class="mt-10 d-flex">
+            <div class="sell-short">
+                <span class="label">Quantity</span>
+                <input type="text" placeholder="Enter Qty" />
+                <button class="btn-prime">SELL SHORT</button>
             </div>
         </div>
     </div>

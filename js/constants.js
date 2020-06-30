@@ -14,7 +14,12 @@ export var JAVA_NATIVE_TO_HTML_UUID = 'OpenFinUIAppDemo';
 export var JAVA_NATIVE_TO_HTML_TOPIC = 'strawmanScreenData1';
 export var JAVA_NATIVE_TO_HTML_TOPIC__CHART = 'JAVA_NATIVE_TO_HTML_TOPIC__CHART';
 export var JAVA_NATIVE_TO_HTML_TOPIC__DETAILS = 'JAVA_NATIVE_TO_HTML_TOPIC__DETAILS';
+export var JAVA_NATIVE_TO_HTML_TOPIC__FOREX = 'JAVA_NATIVE_TO_HTML_TOPIC__FOREX';
 
 export var WILDCARD_UUID = '*';
 
 export var ENTRYPOINT = 'HTML'
+
+export var SHOW_ADD_SYMBOL = true;
+export var SHOW_ADD_GROUP = true;
+export var SHOW_SELL_SHORT = true;

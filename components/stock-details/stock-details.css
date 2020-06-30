@@ -46,3 +46,13 @@
 .stock-details ul li {
     padding: 2px 0;
 }
+
+.sell-short {
+    color: #ffffff;
+    margin-left: auto;
+}
+
+.sell-short input {
+    margin-left: 10px;
+    width: 90px;
+}

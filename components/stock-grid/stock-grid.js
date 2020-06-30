@@ -8,13 +8,18 @@ import {
     JAVA_NATIVE_TO_HTML_TOPIC,
     DETAILS_WINDOW_TOPIC_IND,
     ENTRYPOINT,
-    TOPIC__DROPDOWN
+    TOPIC__DROPDOWN,
+    SHOW_ADD_SYMBOL,
+    SHOW_ADD_GROUP
  } from '../../js/constants.js';
 import { sendToUnNamedMessage, publishMessage } from '../../js/messaging.js';
 
 const _loader = document.querySelector("#loader");
 const _mainContainer = document.querySelector("#main-container");
+const _addSymbolContainer = document.querySelector("#add-symbol-container");
+const _addGroupButton = document.querySelector("#add-group-button");
 const entryPoint = ENTRYPOINT;
+let stockSymbol = '';
 let gridOptions = {
     rowHeight: 32,
     headerHeight: 40,
@@ -23,12 +28,21 @@ let gridOptions = {
         sortable: true,
         resizable: true,
     },
+    isExternalFilterPresent: isExternalFilterPresent,
+    doesExternalFilterPass: doesExternalFilterPass,
     onGridReady: function (params) {
         params.api.sizeColumnsToFit();
     }
 };
 
 document.addEventListener("DOMContentLoaded", function(){
+    _addSymbolContainer.style.display = SHOW_ADD_SYMBOL===false ? 'none' : undefined;
+    _addGroupButton.style.display = SHOW_ADD_GROUP===false ? 'none' : undefined;
+    document.getElementById('grid-external-filter').addEventListener('keyup', function(e){
+        console.log(e)
+        stockSymbol = e.target.value;
+        gridOptions.api.onFilterChanged();
+    })
     initStockList();
 });
 
@@ -51,6 +65,8 @@ function initStockListWithOpenFin(){
             console.log("UUID: " + process.uuid + ", Application Name: " + process.name);
         });
     });
+
+    // getRealTimeData();
 }
 
 function sendMessage(data) {
@@ -67,6 +83,7 @@ function getLink(params) {
     link.innerHTML = params.value;
     link.href = 'javascript:void(0)'
     link.addEventListener('click', function(){
+        params.node.setSelected(true);
         sendMessage(params.data);
     })
     return link;
@@ -88,14 +105,17 @@ const createColumnDefs = (data) => {
             {
                 headerName: headerMapping[e],
                 field: e,
+                valueGetter: (params) => {
+                    return e==='lastPrice' ? '$ '+params.data[e] : params.data[e]
+                },
                 cellRenderer: e==='symbol' ? (params) => {
                     return getLink(params)
                 } : undefined,
                 cellClass: e==='symbol' ? 'symbol-column' : undefined,
                 headerClass: e==='symbol' ? 'symbol-header-column' : undefined,
-                // headerCheckboxSelection: e==='symbol' ? true : undefined,
-                // headerCheckboxSelectionFilteredOnly: e==='symbol' ? true: undefined,
-                // checkboxSelection: e==='symbol' ? true : undefined,
+                headerCheckboxSelection: e==='symbol' ?   true : undefined,
+                headerCheckboxSelectionFilteredOnly: e==='symbol' ? true: undefined,
+                checkboxSelection: e==='symbol' ? true : undefined,
                 width: e==='symbol' ? 180 : undefined
             }
         )
@@ -114,39 +134,38 @@ const getGridData = function (data) {
     }, 1000);    
 }
 
-// const getRealTimeData = function() {
-//     const socket = new WebSocket('https://finnhub.io/api/v1/forex/rates?base=USD&token=brgslqnrh5r9t6gjebng');
-//     const messages = [
-//         {'type':'subscribe', 'symbol': 'AAPL'},
-//         {'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},
-//         {'type':'subscribe', 'symbol': 'IC MARKETS:1'}
-//     ]
-//     // Connection opened -> Subscribe
-//     socket.addEventListener('open', function (event) {
-//         socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'},))
-//         // for (message in messages) {
-//         //     socket.send(JSON.stringify(message))
-//         // }
-//         // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
-//     });
+function isExternalFilterPresent() {
+    return stockSymbol != '';
+}
 
-//     // Listen for messages
-//     socket.addEventListener('message', function (e) {
-//         const socketData = JSON.parse(e.data);
-//         switch (socketData.type) {
-//             case 'trade':
-//                 gridOptions.api.setRowData(createRowData(socketData));
-//                 break;
-//             default:
-//                 console.log('unrecognised event type ' + e.type);
-//         }
-//     });
+function doesExternalFilterPass(params) {
+    var filterTextLowerCase = stockSymbol.toString().toLowerCase();
+    var valueLowerCase = params.data.symbol.toLowerCase();
 
-//     // Unsubscribe
-//     var unsubscribe = function(symbol) {
-//         socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
-//     }
-// }
+    console.log(filterTextLowerCase, valueLowerCase)
+    return valueLowerCase.indexOf(filterTextLowerCase) >= 0;
+}
+
+const getRealTimeData = function() {
+    const socket = new WebSocket('wss://ws.finnhub.io?token=brgslqnrh5r9t6gjebng');
+    // Connection opened -> Subscribe
+    // Connection opened -> Subscribe
+    socket.addEventListener('open', function (event) {
+        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'}))
+        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'}))
+        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+    });
+
+    // Unsubscribe
+    var unsubscribe = function(symbol) {
+        socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
+    }
+}
 
 function initNoOpenFin(){
     alert("OpenFin is not available - you are probably running in a browser.");

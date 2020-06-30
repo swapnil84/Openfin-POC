@@ -7,7 +7,8 @@ import {
     WILDCARD_UUID,
     TOPIC__DROPDOWN,
     TOPIC__SYMBOL_CHANGE,
-    JAVA_NATIVE_TOPIC
+    JAVA_NATIVE_TOPIC,
+    SHOW_SELL_SHORT
 } from '../../js/constants.js';
 import { publishMessage } from '../../js/messaging.js';
 
@@ -16,6 +17,18 @@ const _loader = document.querySelector("#loader");
 const _mainContainer = document.querySelector("#main-container");
 const _stockNameWrapper = document.querySelector("#stock-name");
 const _symbolDropdownWrapper = document.querySelector("#dropdown-container");
+const _sellShortContainer = document.querySelector("#sell-short-container");
+const staticData = {
+    prevClose: "314.96",
+    open: "315.03",
+    dayRange: "314.75 - 318.52",
+    weekRange: "314.96",
+    marketCap: "314.75 - 318.52",
+    beta5YMonthly: "314.96",
+    peRatio: "314.75 - 318.52",
+    eps: "314.75 - 318.52",
+    earningDate: "314.75 - 318.52",
+}
 
 const initInterAppBus = () => {
     const hasDropDown = document.body.contains(document.getElementById('stock-dropdown'))
@@ -46,7 +59,7 @@ const initInterAppBus = () => {
                 _loader.style.display = 'none';
                 _mainContainer.style.display = 'block';
                 _stockNameWrapper.innerHTML = message[0].symbol;
-                updateData(message[0]);
+                updateData(staticData);
             }
         );
         // Data will be published from Grid window on link click
@@ -58,7 +71,7 @@ const initInterAppBus = () => {
                 _mainContainer.style.display = 'block';
                 _stockNameWrapper.innerHTML = message.symbol;
                 document.getElementById('stock-dropdown').value = message.symbol;
-                updateData(message);
+                updateData(staticData);
             }
         );
     } else {
@@ -141,25 +154,13 @@ function init(){
     }
 };
 
-var data = {
-    prevClose: "314.96",
-    open: "315.03",
-    dayRange: "314.75 - 318.52",
-    weekRange: "314.96",
-    marketCap: "314.75 - 318.52",
-    beta5YMonthly: "314.96",
-    peRatio: "314.75 - 318.52",
-    eps: "314.75 - 318.52",
-    earningDate: "314.75 - 318.52",
-}
-
 function updateData(res){
     console.log(res)
-    document.getElementById("prevClose").innerText = `${res.lastPrice}`;
-    // document.getElementById("open").innerText = `${res.o}`;
-    // document.getElementById("dayRange").innerText = `${res.l} - ${res.h}`;
+    document.getElementById("prevClose").innerText = `$ ${res.lastPrice}`;
+    // document.getElementById("open").innerText = `$ ${res.o}`;
+    // document.getElementById("dayRange").innerText = `$ ${res.l} - $ ${res.h}`;
     // document.getElementById("weekRange").innerText = data.weekRange;
-    document.getElementById("marketCap").innerText = `${res.marketCap}`;
+    document.getElementById("marketCap").innerText = `$ ${res.marketCap}`;
     // document.getElementById("beta5YMonthly").innerText = data.beta5YMonthly;
     // document.getElementById("peRatio").innerText = data.peRatio;
     // document.getElementById("eps").innerText = data.eps;
@@ -169,6 +170,7 @@ function updateData(res){
 (function () {
     'use strict';
     document.addEventListener("DOMContentLoaded", function(){
+        _sellShortContainer.style.display = SHOW_SELL_SHORT===false ? 'none' : undefined;
         init();
     });
 }());

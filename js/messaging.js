@@ -78,10 +78,8 @@ export function sendToUnNamedMessage(RECEIVERS_UUID, topic, data) {
         });
 }
 
-
 export function publishMessage(topic, data) {
-    console.log(topic, data)
-    // fin.desktop.InterApplicationBus.publish(topic, data);
-    fin.InterApplicationBus.publish(topic, data).then(() => console.log('Published')).catch(err => console.log(err));
-
+    fin.InterApplicationBus.publish(topic, data)
+    .then(() => console.log('Published'))
+    .catch(err => console.log(err));
 }

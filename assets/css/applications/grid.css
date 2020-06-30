@@ -27,7 +27,7 @@
 }
 
 .ag-theme-balham .symbol-column {
-    font-weight: 600;
+    /* font-weight: 600; */
     background-color: #222222c2 !important;
 }
 
@@ -150,3 +150,25 @@
 .ag-center-cols-viewport {
     overflow: hidden;
 }
+
+.ag-theme-balham .ag-checkbox-input-wrapper {
+    background-color: transparent;
+}
+
+.ag-theme-balham .ag-checkbox-input-wrapper:after {
+    color: #4CD2D4 !important;
+    outline: 0;
+    outline-offset: 0;
+}
+
+.ag-theme-balham .ag-icon {
+    color: #ffffff;
+}
+
+.filter-icon {
+    margin-right: 5px;
+}
+
+.filter-icon img {
+    vertical-align: middle;
+}   
