@@ -1,0 +1,15 @@
+#add-symbol-container {
+    position: relative;
+}
+
+.filter-dropdown {
+    position: absolute;
+    z-index: 10;
+    background: #333;
+    border: 1px #fff solid;
+    width: 100%;
+    margin-top: -1px;
+    max-height: 200px;
+    overflow: auto;
+    display: none;
+}

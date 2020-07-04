@@ -39,6 +39,14 @@ class TitleBar extends HTMLElement {
         // <div class="button" title="Toggle Layout Lock" id="lock-button" @click=${this.toggleLockedLayout}></div>
         const titleBar = html`
                 <div class="title-bar-draggable">
+                    <div class="brand">
+                        <image src="../assets/brand-logo.svg" />
+                    </div>
+                    <div class="account-details">
+                        <span><label>Total Account Value</label>$10,000</span>
+                        <span><label>Today's Change</label>$0</span>
+                        <span><label>Available to Withdraw</label>$5,000</span>
+                    </div>
                     <div id="title"></div>
                 </div>
                 <div id="buttons-wrapper">

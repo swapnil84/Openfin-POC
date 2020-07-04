@@ -83,3 +83,17 @@
     border-top: 0;
     border-bottom: 7px solid #23a457;
 }
+
+.nav-tabs {
+    border: 0;
+}
+
+.nav-tabs .nav-link {
+    background-color: transparent !important;
+    border: 0;
+    color: #a3a5a8;
+}
+
+.nav-tabs .nav-link.active {
+    color: #ffffff;
+}

@@ -1,6 +1,4 @@
 import { 
-    DETAILS_WINDOW_TOPIC, 
-    DETAILS_WINDOW_TOPIC_IND, 
     JAVA_NATIVE_TOPIC,
     JAVA_NATIVE_TO_HTML_TOPIC__CHART,
     WILDCARD_UUID,
@@ -31,6 +29,7 @@ const initInterApp = () => {
             createDropdownComponent(message);
         }
     );
+    // Data will be published from Grid window on link click or dropdown select from chart window
     fin.desktop.InterApplicationBus.subscribe(
         'MPH_POC_PLTFORM_UUID',
         TOPIC__SYMBOL_CHANGE,
@@ -42,14 +41,6 @@ const initInterApp = () => {
         Highcharts.getJSON(chartDataUrl, function (data) {
             showChart(data)
         });
-         // Data will be published from Grid window after grid link click
-         fin.desktop.InterApplicationBus.subscribe(
-            'MPH_POC_PLTFORM_UUID',
-            DETAILS_WINDOW_TOPIC_IND,
-            function (message, uuid) {
-                document.getElementById('stock-dropdown').value = message.symbol;
-            }
-        );
     } else {
         // Data will published from JAVA
         subscribeToJavaData();

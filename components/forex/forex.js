@@ -1,11 +1,19 @@
-import { JAVA_NATIVE_TO_HTML_TOPIC__FOREX, WILDCARD_UUID } from '../../js/constants.js';
+import { JAVA_NATIVE_TO_HTML_TOPIC__FOREX, WILDCARD_UUID, ENTRYPOINT } from '../../js/constants.js';
+import { html, render } from 'https://unpkg.com/lit-html@1.0.0/lit-html.js';
+import { fxTile } from './tile.js';
 const _mainContainer = document.querySelector("#main-container");
+const _loader = document.querySelector("#loader");
+const _currencyContainer = document.querySelector("#currency-container");
+const fxDataUrl = '../../api/fx.json';
+let entryPoint = ENTRYPOINT;
+var chart;
+var chartBusData;
 
 const initInterAppBus = () => {
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
-    subscribeToJavaData();
+    // subscribeToJavaData();
 };
 
 function subscribeToJavaData() {
@@ -28,10 +36,21 @@ const initNoOpenFin = () => {
 }
 
 const initWithOpenFin = () => {
-    if (_mainContainer.childNodes.length > 0) {
-        createCurrencyChart();
-    }
     initInterAppBus();
+    if(entryPoint = 'HTML') {
+        console.log(_currencyContainer.childNodes.length)
+        // createCurrencyChart('Hi');
+        // if (_currencyContainer.childNodes.length > 0) {
+            // requestLiveData();
+            // Highcharts.getJSON(fxDataUrl, function (data) {
+            //     console.log(data)
+        createCurrencyChart();
+            //     // createFXChart(fxSymbols);
+            // });
+        // }
+    } else {
+        initInterAppBus();
+    }
 }
 
 function init(){
@@ -52,73 +71,94 @@ function init(){
 }());
 
 function createCurrencyChart() {
-    const currencyResponse = {
-        "base": "USD",
-        "quote": {
-            "EUR": 0.91,
-            "JPY": 114.583548,
-            "GBP": 0.874841,
-            "USD": 1,
-        }
-    }
-    Object.keys(currencyResponse.quote).forEach(element => {
-        Highcharts.stockChart('currency-chart-container-'+element, {
-            chart: {
-                height: 150,
-                backgroundColor: '#25262A',
-                events: {
-                    load: function () {
-                        // set up the updating of the chart each second
-                        var series = this.series[0];
-                        setInterval(function () {
-                            var x = (new Date()).getTime(), // current time
-                                y = Math.round(Math.random() * 100);
-                            series.addPoint([x, y], true, true);
-                        }, 100);
-                    }
-                }
-            },
-            xAxis: {
-                visible: false
-            },
-            yAxis: {
-                visible: false
-            },
-            series: [{
-                data: (function () {
-                    // generate an array of random data
-                    var data = [],
-                        time = (new Date()).getTime(),
-                        i;
-        
-                    for (i = -999; i <= 0; i += 1) {
-                        data.push([
-                            time + i * 1000,
-                            Math.round(Math.random() * 100)
-                        ]);
-                    }
-                    return data;
-                }()),
-                tooltip: {
-                    valueDecimals: 2
-                },
-                color: '#3f7482'
-            }],
-            navigator: {
-                enabled: false
-            },
-            scrollbar: {
-                enabled: false,
-            },
-            exporting: {
-                enabled: false
-            },
-            rangeSelector: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            }
-        });
-    }); 
+    // console.log(data)
+    // const fxKeys = Object.keys(data.quote);
+    // const fxSymbols = fxKeys.map(i => i.split(':')).map(j => j[1].split('_'));
+    // // console.log(fxSymbols)
+    const fxSymbols = [["EUR", "USD"]];
+    render(fxTile({fxSymbols}), document.getElementById('currency-container'))
+    // // console.log(Object.keys(data.quote))
+    
+    // fxKeys.forEach(key => {
+    //     const fxSymbol = key.split(':')[1].split('_').join('');
+    //     console.log(fxSymbol)
+    //     createFXChart(fxSymbol, data.quote[key]);
+    // })
+    createFXChart();
+    
 }
+
+async function loadCurrChartData() {
+    _mainContainer.style.display = 'block';
+    _loader.style.display = 'none';
+    fin.desktop.InterApplicationBus.subscribe(
+        'MPH_POC_PLTFORM_UUID',
+        'TOPIC_FXCHART',
+        function (message, uuid) {
+            const [date, value] = message[0];
+            console.log(message[0])
+            const point = [new Date(date).getTime(), value];
+            const series = chart.series[0],
+                shift = series.data.length > 20; // shift if the series is longer than 20
+            // add the point
+            chart.series[0].addPoint(point, true, shift);
+        }
+    );
+}
+
+function createFXChart() {
+    chart = new Highcharts.stockChart({
+        chart: {
+            renderTo: `currency-chart-container-EURUSD`,
+            height: 150,
+            backgroundColor: '#25262A',
+            events: {
+                load: loadCurrChartData
+            }
+        },
+        xAxis: {
+            visible: false
+        },
+        yAxis: {
+            visible: false
+        },
+        series: [{
+            data: [],
+            tooltip: {
+                valueDecimals: 2
+            },
+            color: '#3f7482'
+        }],
+        navigator: {
+            enabled: false
+        },
+        scrollbar: {
+            enabled: false,
+        },
+        exporting: {
+            enabled: false
+        },
+        rangeSelector: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        }
+    })
+}
+
+async function requestData() {
+    const result = await fetch('https://demo-live-data.highcharts.com/time-rows.json');
+    if (result.ok) {
+      const data = await result.json();
+      const [date, value] = data[0];
+      console.log(data[0])
+      const point = [new Date(date).getTime(), value];
+      const series = chart.series[0],
+        shift = series.data.length > 20; // shift if the series is longer than 20
+      // add the point
+      chart.series[0].addPoint(point, true, shift);
+      // call it again after one second
+      setTimeout(requestData, 1000);
+    }
+  }

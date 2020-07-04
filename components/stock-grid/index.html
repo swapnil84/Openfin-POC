@@ -11,16 +11,25 @@
     <link rel="stylesheet" href="../../assets/css/applications/grid.css">
     <link rel="stylesheet" href="../../assets/css/applications/common.css">
     <link rel="stylesheet" href="../../assets/css/applications/loader.css">
+    <link rel="stylesheet" href="./watchlist.css">
 </head>
 <body>
     <div class="loader" id="loader"></div>
     <div class="main-wrapper mt-20" id="main-container" style="display: none;">
         <div class="mb-15 d-flex">
             <div>
-                <span id="add-symbol-container">
-                    <input type="text" class="h18" placeholder="Add Symbol(s)" />
+                <div id="add-symbol-container">
+                    <input type="text" class="h18" placeholder="Add Symbol(s)" id="filter-symbol" />
                     <button class="btn-second">ADD</button>
-                </span>
+                    <div class="filter-dropdown" id="filter-dropdown">
+                        <ul>
+                            <li>Symbol 1</li>
+                            <li>Symbol 2</li>
+                            <li>Symbol 3</li>
+                            <li>Symbol 4</li>
+                        </ul>
+                    </div>
+                </div>
                 <button id="add-group-button" class="btn-prime">ADD GROUP</button>
             </div>
             <div id="stock-filter">

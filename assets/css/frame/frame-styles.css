@@ -172,6 +172,45 @@ fieldset label {
     opacity: 1;
 }
 
+#buttons-wrapper {
+    margin-right: 15px;
+}
+
 .button {
     background-size: 20px;
+    padding: 0 5px;
+}
+
+.title-bar-draggable {
+    margin: 0 !important;
+    display: flex;
+}
+
+.brand {
+    background-color: #bb0826;
+    width: 120px;
+    height: 100%;
+    line-height: 40px;
+    text-align: center;
+    padding: 0 10px;
+    margin-left: 60px;
+}
+
+.brand img {
+    width: 90px;
+}
+
+.account-details {
+    font-size: 12px;
+    line-height: 40px;
+    margin-left: 350px;
+}
+
+.account-details > span {
+    margin-right: 40px;
+}
+
+.account-details > span > label {
+    margin-right: 10px;
+    color: #919395;
 }

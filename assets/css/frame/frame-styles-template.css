@@ -46,7 +46,7 @@
     --top-bar-button-active-color: var(--tab-button-active-color);
 
     /* Measurements for various components */
-    --title-bar-height: 30px;
+    --title-bar-height: 40px;
     --title-bar-border-bottom-height: 0px;
     --header-border-bottom-height: 2px;
     --corner-radius: 0px;

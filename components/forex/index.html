@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>LIVE RATES</title>
+    <title>CURRENCY</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="../../lib/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/applications/common.css">
+    <link rel="stylesheet" href="../../assets/css/applications/loader.css" />
     <link rel="stylesheet" href="forex.css">
     <script src="../../lib/jquery.min.js"></script>
     <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="../../lib/axios.min.js"></script>
     <script src="../../lib/highcharts/highstock.js"></script>
     <script src="../../lib/highcharts/data.js"></script>
     <script type="module" src="currency-tile.js"></script>
@@ -20,7 +20,18 @@
 <body>
     <div class="loader" id="loader"></div>
     <div id="main-container" class="container-fluid main-wrapper">
-        <currency-tile></currency-tile>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">EUR/USD</a>
+              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">USD/JPY</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div id="currency-container"></div>
+            </div>
+          </div>
+        <!-- <currency-tile></currency-tile> -->
     </div>
 <script type="module" src="forex.js"></script>
 </body>

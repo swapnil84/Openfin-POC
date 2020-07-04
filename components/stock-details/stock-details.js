@@ -43,13 +43,6 @@ const initInterAppBus = () => {
             createDropdownComponent(message);
         }
     );
-    fin.desktop.InterApplicationBus.subscribe(
-        'MPH_POC_PLTFORM_UUID',
-        TOPIC__SYMBOL_CHANGE,
-        function (message, uuid) {
-            document.getElementById('stock-dropdown').value = message;
-        }
-    );
     if (entryPoint === 'HTML') {
         // Data will be published from Grid window on load
         fin.desktop.InterApplicationBus.subscribe(
@@ -62,15 +55,15 @@ const initInterAppBus = () => {
                 updateData(staticData);
             }
         );
-        // Data will be published from Grid window on link click
+        // Data will be published from Grid window on link click or dropdown select from chart window
         fin.desktop.InterApplicationBus.subscribe(
             'MPH_POC_PLTFORM_UUID',
-            DETAILS_WINDOW_TOPIC_IND,
+            TOPIC__SYMBOL_CHANGE,
             function (message, uuid) {
                 _loader.style.display = 'none';
                 _mainContainer.style.display = 'block';
-                _stockNameWrapper.innerHTML = message.symbol;
-                document.getElementById('stock-dropdown').value = message.symbol;
+                _stockNameWrapper.innerHTML = message;
+                document.getElementById('stock-dropdown').value = message;
                 updateData(staticData);
             }
         );
@@ -85,11 +78,12 @@ function subscribeToJavaData() {
         WILDCARD_UUID,
         JAVA_NATIVE_TO_HTML_TOPIC__DETAILS,
         function (message, uuid) {
-            console.log(message)
-            _loader.style.display = 'none';
-            _mainContainer.style.display = 'block';
-            _stockNameWrapper.innerHTML = message.symbol;
-            updateData(message);
+            if (message !== undefined || message !== 'undefined') {
+                _loader.style.display = 'none';
+                _mainContainer.style.display = 'block';
+                _stockNameWrapper.innerHTML = message.symbol;
+                updateData(message);
+            }
         }
     );
 }

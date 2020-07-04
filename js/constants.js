@@ -21,5 +21,5 @@ export var WILDCARD_UUID = '*';
 export var ENTRYPOINT = 'HTML'
 
 export var SHOW_ADD_SYMBOL = true;
-export var SHOW_ADD_GROUP = true;
+export var SHOW_ADD_GROUP = false;
 export var SHOW_SELL_SHORT = true;

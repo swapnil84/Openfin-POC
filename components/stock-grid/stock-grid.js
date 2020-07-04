@@ -7,6 +7,7 @@ import {
     JAVA_NATIVE_TO_HTML_UUID,
     JAVA_NATIVE_TO_HTML_TOPIC,
     DETAILS_WINDOW_TOPIC_IND,
+    TOPIC__SYMBOL_CHANGE,
     ENTRYPOINT,
     TOPIC__DROPDOWN,
     SHOW_ADD_SYMBOL,
@@ -18,6 +19,8 @@ const _loader = document.querySelector("#loader");
 const _mainContainer = document.querySelector("#main-container");
 const _addSymbolContainer = document.querySelector("#add-symbol-container");
 const _addGroupButton = document.querySelector("#add-group-button");
+const _filterSymbolField = document.querySelector("#filter-symbol");
+const _filterDropdown = document.querySelector("#filter-dropdown");
 const entryPoint = ENTRYPOINT;
 let stockSymbol = '';
 let gridOptions = {
@@ -46,6 +49,21 @@ document.addEventListener("DOMContentLoaded", function(){
     initStockList();
 });
 
+_filterSymbolField.addEventListener('keyup', function(e) {
+    const val = e.target.value;
+    console.log(val)
+    _filterDropdown.style.display = 'block';
+})
+
+_filterSymbolField.addEventListener('focus', function() {
+    _filterSymbolField.setAttribute('placeholder', '')
+})
+  
+_filterSymbolField.addEventListener('blur', function() {
+    _filterSymbolField.setAttribute('placeholder', 'Add Symbol(s)')
+    _filterDropdown.style.display = 'none';
+})
+
 function initStockList(){
     try{
         fin.desktop.main(function(){
@@ -71,11 +89,10 @@ function initStockListWithOpenFin(){
 
 function sendMessage(data) {
     if (entryPoint === 'HTML') {
-        publishMessage(DETAILS_WINDOW_TOPIC_IND, data);
+        publishMessage(TOPIC__SYMBOL_CHANGE, data.symbol);
     } else {
         publishMessage(JAVA_NATIVE_TOPIC, data.symbol);
     }
-
 }
 
 function getLink(params) {
@@ -116,7 +133,8 @@ const createColumnDefs = (data) => {
                 headerCheckboxSelection: e==='symbol' ?   true : undefined,
                 headerCheckboxSelectionFilteredOnly: e==='symbol' ? true: undefined,
                 checkboxSelection: e==='symbol' ? true : undefined,
-                width: e==='symbol' ? 180 : undefined
+                width: e==='symbol' ? 180 : undefined,
+                hide: e==='currency' ? true : undefined
             }
         )
     });
@@ -127,11 +145,33 @@ const getGridData = function (data) {
     gridOptions.api.setRowData(data);
     gridOptions.api.setColumnDefs(createColumnDefs(data));
     gridOptions.api.sizeColumnsToFit();
+    gridOptions.api.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true));
     _mainContainer.style.display = 'block';
     _loader.style.display = 'none';
     setTimeout(() => {
         publishMessage(TOPIC__DROPDOWN, data);
-    }, 1000);    
+    }, 1000);
+    requestData();
+    searchSymbol();
+}
+
+async function requestData() {
+    const result = await fetch('https://demo-live-data.highcharts.com/time-rows.json');
+    if(result.ok) {
+        const data = await result.json();
+        publishMessage('TOPIC_FXCHART', data);
+        setTimeout(requestData, 10000);
+    }
+    
+}
+
+async function searchSymbol() {
+    const stockResult = await fetch('https://finnhub.io/api/v1/stock/symbol?exchange=US&token=brgslqnrh5r9t6gjebng');
+    if(stockResult.ok) {
+        const stocksList = await stockResult.json();
+        console.log(stocksList)
+    }
+
 }
 
 function isExternalFilterPresent() {
@@ -249,6 +289,13 @@ function initInterAppBus() {
     } else {
         subscribeToJavaData()
     }
+    fin.desktop.InterApplicationBus.subscribe(
+        'MPH_POC_PLTFORM_UUID',
+        TOPIC__SYMBOL_CHANGE,
+        function (message, uuid) {
+            gridOptions.api.forEachNode(node => node.data.symbol === message ? node.setSelected(true) : node.setSelected(false));
+        }
+    );
 };
 
 function subscribeToJavaData() {

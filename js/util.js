@@ -203,3 +203,59 @@ export async function open(config, winLoc) {
       }
     }
   }
+
+// export function getTime(time_stamp) {
+//     // let unix_timestamp = 1549312452
+//     // Create a new JavaScript Date object based on the timestamp
+//     // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+//     var date = new Date(time_stamp * 1000);
+//     // Hours part from the timestamp
+//     var hours = date.getHours();
+//     // Minutes part from the timestamp
+//     var minutes = "0" + date.getMinutes();
+//     // Seconds part from the timestamp
+//     var seconds = "0" + date.getSeconds();
+
+//     // Will display time in 10:30:23 format
+//     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+//     console.log(formattedTime);
+//     return { date: date, time: formattedTime };
+// }
+
+export function getTime(time_stamp){
+  var a = new Date(time_stamp * 1000);
+  var dd = "AM";
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+
+  var h = hour;
+  if (h >= 12) {
+    h = hour - 12;
+    dd = "PM";
+  }
+  if (h == 0) {
+    h = 12;
+  }
+
+  var min = a.getMinutes() < 10 ? '0' + a.getMinutes() : a.getMinutes(); 
+  var sec = a.getSeconds() < 10 ? '0' + a.getSeconds() : a.getSeconds();
+  var time = { date: date, month: month, year: year, time: h + ':' + min + ' '+dd } ;
+  return time;
+}
+
+export function getDate(t) {
+  var d = new Date();
+      d.setDate(d.getDate() - t);
+  var month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+    return [year, month, day].join('-');
+}
