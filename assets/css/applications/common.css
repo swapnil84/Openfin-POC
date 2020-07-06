@@ -32,6 +32,8 @@ body, html {
 ul{
     list-style-type: none;
     line-height: 30px;
+    margin: 0;
+    padding: 0;
 }
 
 a {
@@ -122,7 +124,7 @@ button.btn-go {
     border: 0;
     outline: 0;
     margin-left: 10px;
-    height: 32px;
+    height: 33px;
     font-family: 'Myriad', Fallback, sans-serif;
     cursor: pointer;
 }
@@ -138,7 +140,7 @@ button.btn-prime, button.btn-second {
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    height: 32px;
+    height: 33px;
 }
 
 button.btn-second {

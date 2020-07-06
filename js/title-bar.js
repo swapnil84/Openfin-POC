@@ -39,6 +39,7 @@ class TitleBar extends HTMLElement {
         // <div class="button" title="Toggle Layout Lock" id="lock-button" @click=${this.toggleLockedLayout}></div>
         const titleBar = html`
                 <div class="title-bar-draggable">
+                    <div class="button" title="Toggle Sidebar" id="menu-button"></div>
                     <div class="brand">
                         <image src="../assets/brand-logo.svg" />
                     </div>
@@ -49,7 +50,12 @@ class TitleBar extends HTMLElement {
                     </div>
                     <div id="title"></div>
                 </div>
-                <div id="buttons-wrapper">
+                <div id="buttons-wrapper">                    
+                    <div class="button" title="Toggle Theme" id="theme-button"></div>
+                    <div class="button" title="Notification" id="notification-button"></div>
+                    <div class="button" title="Setting" id="setting-button"></div>
+                    <div class="button" title="Profile" id="profile-button"></div>
+                    <div class="separator"></div>
                     <div class="button" title="Minimize Window" id="minimize-button" @click=${() => fin.me.minimize().catch(console.error)}></div>
                     <div class="button" title="Maximize Window" id="expand-button" @click=${() => this.maxOrRestore().catch(console.error)}></div>
                     <div class="button" title="Close Window" id="close-button" @click=${() => fin.me.close().catch(console.error)}></div>

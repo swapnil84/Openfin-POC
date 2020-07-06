@@ -5,11 +5,43 @@
 .filter-dropdown {
     position: absolute;
     z-index: 10;
-    background: #333;
+    background: #2F3338;
     border: 1px #fff solid;
-    width: 100%;
+    width: 300px;
     margin-top: -1px;
     max-height: 200px;
     overflow: auto;
     display: none;
+}
+
+.filter-list-item {
+    color: #ffffff;
+    padding: 3px 10px;
+    cursor: default;
+}
+
+.filter-list-item:hover {
+    background-color: #00a8f3;
+}
+
+.filter-list-item .symbol {
+    font-weight: 700;
+    width: 70px;
+    display: inline-block;
+}
+
+.filter-list-item .company {
+    font-size: 11px;
+}
+
+.filter-icon {
+    display: inline-block;
+    -webkit-app-region: no-drag;
+    vertical-align: middle;
+    height: 100%;
+    width: 30px;
+    background-size: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/filter_icon.svg');
 }

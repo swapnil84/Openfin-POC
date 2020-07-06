@@ -84,8 +84,59 @@
     border-bottom: 7px solid #23a457;
 }
 
+.button-add-fx {
+    background-image: url('../../assets/add_icon.svg');
+    background-size: 20px;
+    width: 32px;
+    background-repeat: no-repeat;
+    margin-left: auto;
+    -webkit-app-region: no-drag;
+    vertical-align: middle;
+    background-position: center;
+    cursor: pointer;
+    position: relative;
+}
+
+#currency-selector {
+    position: absolute;
+    right: 100%;
+    border: 1px #ffffff solid;
+    background-color: #2F3338;
+    color: #fff;
+}
+
+#currency-selector li {
+    padding: 5px 10px;
+}
+
+#currency-selector li:hover {
+    background-color: #00a8f3;
+}
+
+nav {
+    display: flex;
+}
+
 .nav-tabs {
     border: 0;
+    position: relative;
+    clear: both;
+    margin: 0;
+    width: 90%;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: block;
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-link {
+    padding: .5rem 0.75rem;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .nav-tabs .nav-link {

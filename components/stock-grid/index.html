@@ -19,24 +19,18 @@
         <div class="mb-15 d-flex">
             <div>
                 <div id="add-symbol-container">
-                    <input type="text" class="h18" placeholder="Add Symbol(s)" id="filter-symbol" />
-                    <button class="btn-second">ADD</button>
-                    <div class="filter-dropdown" id="filter-dropdown">
-                        <ul>
-                            <li>Symbol 1</li>
-                            <li>Symbol 2</li>
-                            <li>Symbol 3</li>
-                            <li>Symbol 4</li>
-                        </ul>
-                    </div>
+                    <input type="text" class="h18" placeholder="Add Symbol(s)" tabIndex="-1" id="filter-symbol" />
+                    <button class="btn-second" id="add-symbol-btn">ADD</button>
+                    <div class="filter-dropdown" id="filter-dropdown"></div>
                 </div>
                 <button id="add-group-button" class="btn-prime">ADD GROUP</button>
             </div>
             <div id="stock-filter">
-                <span class="filter-icon"><image src="../../assets/filter-icon.gif" /></span><input type="text" class="h18" id="grid-external-filter" />
+                <span class="filter-icon"></span><input type="text" class="h18" id="grid-external-filter" />
             </div>
         </div>
         <div id="myGrid" style="height:220px" class="ag-theme-balham"></div>
+        <button id="send-to-fx">Click</button>
     </div>
     <!-- <script type="module" src="stock-grid.js"></script> -->
     <script>document.write("<script type='module' src='stock-grid.js?v='" + Date.now() + "'><\/script>");</script>

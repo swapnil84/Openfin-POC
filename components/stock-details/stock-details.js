@@ -18,6 +18,9 @@ const _mainContainer = document.querySelector("#main-container");
 const _stockNameWrapper = document.querySelector("#stock-name");
 const _symbolDropdownWrapper = document.querySelector("#dropdown-container");
 const _sellShortContainer = document.querySelector("#sell-short-container");
+const _sellShortField = document.querySelector("#enter-sell-short");
+const _sellShortBTN = document.querySelector("#sell-short-btn");
+
 const staticData = {
     prevClose: "314.96",
     open: "315.03",
@@ -31,7 +34,6 @@ const staticData = {
 }
 
 const initInterAppBus = () => {
-    const hasDropDown = document.body.contains(document.getElementById('stock-dropdown'))
     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
         console.log("The application " + uuid + " has subscribed to " + topic);
     });
@@ -149,7 +151,6 @@ function init(){
 };
 
 function updateData(res){
-    console.log(res)
     document.getElementById("prevClose").innerText = `$ ${res.lastPrice}`;
     // document.getElementById("open").innerText = `$ ${res.o}`;
     // document.getElementById("dayRange").innerText = `$ ${res.l} - $ ${res.h}`;
@@ -167,4 +168,16 @@ function updateData(res){
         _sellShortContainer.style.display = SHOW_SELL_SHORT===false ? 'none' : undefined;
         init();
     });
+    _sellShortField.addEventListener('focus', function(event) {
+        _sellShortField.setAttribute('placeholder', '')
+    })
+      
+    _sellShortField.addEventListener('blur', function() {
+        _sellShortField.setAttribute('placeholder', 'Enter Qty')
+    })
+
+    _sellShortBTN.addEventListener('click', function() {
+        const sellShotValue = _sellShortField.value;
+        publishMessage('JAVA_NATIVE_TOPIC_SELL_SHORT', sellShotValue);
+    })
 }());

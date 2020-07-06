@@ -1,3 +1,4 @@
+import { html, render } from 'https://unpkg.com/lit-html@1.0.0/lit-html.js';
 import { 
     DETAILS_WINDOW_UUID, 
     DETAILS_WINDOW_TOPIC, 
@@ -21,8 +22,14 @@ const _addSymbolContainer = document.querySelector("#add-symbol-container");
 const _addGroupButton = document.querySelector("#add-group-button");
 const _filterSymbolField = document.querySelector("#filter-symbol");
 const _filterDropdown = document.querySelector("#filter-dropdown");
+const _addSymbolBTN = document.querySelector('#add-symbol-btn');
+const _gridExternalFilter = document.querySelector('#grid-external-filter');
+
+const fxDataUrl = '../../api/fx.json';
+const fxDataUrl2 = '../../api/fx2.json';
 const entryPoint = ENTRYPOINT;
 let stockSymbol = '';
+var stocksList;
 let gridOptions = {
     rowHeight: 32,
     headerHeight: 40,
@@ -41,28 +48,90 @@ let gridOptions = {
 document.addEventListener("DOMContentLoaded", function(){
     _addSymbolContainer.style.display = SHOW_ADD_SYMBOL===false ? 'none' : undefined;
     _addGroupButton.style.display = SHOW_ADD_GROUP===false ? 'none' : undefined;
-    document.getElementById('grid-external-filter').addEventListener('keyup', function(e){
-        console.log(e)
-        stockSymbol = e.target.value;
-        gridOptions.api.onFilterChanged();
-    })
     initStockList();
 });
 
-_filterSymbolField.addEventListener('keyup', function(e) {
-    const val = e.target.value;
-    console.log(val)
-    _filterDropdown.style.display = 'block';
+_gridExternalFilter.addEventListener('keyup', function(event){
+    stockSymbol = event.target.value;
+    gridOptions.api.onFilterChanged();
 })
 
-_filterSymbolField.addEventListener('focus', function() {
+window.addEventListener('click', function(event) {
+    _filterDropdown.style.display = 'none';
+})
+
+_filterSymbolField.addEventListener('click', function(event) {
+    event.stopPropagation();
+})
+
+_filterSymbolField.addEventListener('keyup', function(event) {
+    _filterDropdown.style.display = 'block';
+    const val = event.target.value.toLowerCase();
+    filterSymbol(val);
+})
+
+_filterSymbolField.addEventListener('focus', function(event) {
+    const textVal = event.target.value.toLowerCase();
+    if (textVal !== '') {
+        _filterDropdown.style.display = 'block';
+        filterSymbol(textVal);
+    }
     _filterSymbolField.setAttribute('placeholder', '')
 })
   
 _filterSymbolField.addEventListener('blur', function() {
     _filterSymbolField.setAttribute('placeholder', 'Add Symbol(s)')
-    _filterDropdown.style.display = 'none';
 })
+
+_addSymbolBTN.addEventListener('click', function() {
+    alert(_filterSymbolField.value);
+    publishMessage('JAVA_NATIVE_TOPIC_ADD_SYMBOL', _filterSymbolField.value);
+    // const newRows = [{
+    //     "symbol":"NEW AAPL",
+    //     "lastPrice":"342.99",
+    //     "change":"7.19",
+    //     "changePercent":"0",
+    //     "marketTime":"22:41:59",
+    //     "marketCap":"1490968",
+    //     "currency":"USD"            
+    // }];
+    // gridOptions.api.updateRowData({add: newRows}) 
+})
+
+function selectSymbol(symbol) {
+    _filterSymbolField.value = symbol
+    _filterDropdown.style.display = 'none';
+}
+
+function filterSymbol(value) {
+    const filteredList = stocksList.filter(item => {
+        const filteredItems = item.description.toLowerCase().indexOf(value.toLowerCase()) >= 0 || item.symbol.toLowerCase().startsWith(value);
+        return filteredItems
+    });
+    const listItem = ({stock})  => html`
+                <li class="filter-list-item" @click=${(e) => selectSymbol(stock.symbol)}>
+                    <span class="symbol">${stock.symbol}</span>
+                    <span class="company">${stock.description}</span>
+                </li>
+            `
+    const updatedList = ({filteredList}) => {
+        if (filteredList.length === 0) {
+            return html`
+                <ul class="filter-list">
+                    <li class="filter-list-item">No Symbol Found</li>
+                </ul>
+            `
+        }
+        return html`
+            <ul class="filter-list">
+                ${filteredList.map((stock) => {
+                    return listItem({stock})
+                })}
+            </ul>
+        `  
+    } 
+    render(updatedList({filteredList}), document.getElementById('filter-dropdown'))
+}
 
 function initStockList(){
     try{
@@ -74,17 +143,23 @@ function initStockList(){
     }
 };
 
+async function getSymbols() {
+    const stockResult = await fetch('https://finnhub.io/api/v1/stock/symbol?exchange=US&token=brgslqnrh5r9t6gjebng');
+    if(stockResult.ok) {
+        stocksList = await stockResult.json();
+    }
+}
+
 function initStockListWithOpenFin(){
+    getSymbols();
     var eGridDiv = document.querySelector('#myGrid');
     new agGrid.Grid(eGridDiv, gridOptions);
     initInterAppBus();
-    fin.desktop.System.getProcessList(function (list) {
-        list.forEach(function (process) {
-            console.log("UUID: " + process.uuid + ", Application Name: " + process.name);
-        });
-    });
-
-    // getRealTimeData();
+    // fin.desktop.System.getProcessList(function (list) {
+    //     list.forEach(function (process) {
+    //         console.log("UUID: " + process.uuid + ", Application Name: " + process.name);
+    //     });
+    // });
 }
 
 function sendMessage(data) {
@@ -152,27 +227,33 @@ const getGridData = function (data) {
         publishMessage(TOPIC__DROPDOWN, data);
     }, 1000);
     requestData();
-    searchSymbol();
 }
 
 async function requestData() {
-    const result = await fetch('https://demo-live-data.highcharts.com/time-rows.json');
+    // const result = await fetch('https://demo-live-data.highcharts.com/time-rows.json');
+    // if(result.ok) {
+    //     const data = await result.json();
+    //     publishMessage('TOPIC_FXCHART', data);
+    //     setTimeout(requestData, 10000);
+    // }
+    const result = await fetch(fxDataUrl)
     if(result.ok) {
         const data = await result.json();
-        publishMessage('TOPIC_FXCHART', data);
-        setTimeout(requestData, 10000);
+        publishMessage('TOPIC_FX_CONTAINER', data);
+        setTimeout(() => {
+            publishMessage('TOPIC_FXCHART', data);
+        }, 1000);
+        // setTimeout(requestData, 10000);
     }
-    
 }
 
-async function searchSymbol() {
-    const stockResult = await fetch('https://finnhub.io/api/v1/stock/symbol?exchange=US&token=brgslqnrh5r9t6gjebng');
-    if(stockResult.ok) {
-        const stocksList = await stockResult.json();
-        console.log(stocksList)
+document.getElementById('send-to-fx').addEventListener('click', async function() {
+    const result = await fetch(fxDataUrl2)
+    if(result.ok) {
+        const data = await result.json();
+        publishMessage('TOPIC_FXCHART1', data);
     }
-
-}
+})
 
 function isExternalFilterPresent() {
     return stockSymbol != '';
@@ -182,68 +263,12 @@ function doesExternalFilterPass(params) {
     var filterTextLowerCase = stockSymbol.toString().toLowerCase();
     var valueLowerCase = params.data.symbol.toLowerCase();
 
-    console.log(filterTextLowerCase, valueLowerCase)
     return valueLowerCase.indexOf(filterTextLowerCase) >= 0;
-}
-
-const getRealTimeData = function() {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=brgslqnrh5r9t6gjebng');
-    // Connection opened -> Subscribe
-    // Connection opened -> Subscribe
-    socket.addEventListener('open', function (event) {
-        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'}))
-        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'}))
-        socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
-    });
-
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
-    });
-
-    // Unsubscribe
-    var unsubscribe = function(symbol) {
-        socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
-    }
 }
 
 function initNoOpenFin(){
     alert("OpenFin is not available - you are probably running in a browser.");
 }
-
-// function ManageOpen(appConfig, winLoc, data) {
-//     open(appConfig, winLoc)
-//     .then(app => {
-//         // detailsData = data;        
-//         const DETAILS_UUID = DETAILS_WINDOW_UUID+data.symbol
-//         const DETAILS_TOPIC = DETAILS_UUID;
-//         detailsSubscribeListner(DETAILS_UUID, DETAILS_TOPIC, data)
-//         console.log('Application is running')
-//     // if (!opened) return
-
-//     // const currentApp = opened as Application
-//     // currentApp.addListener('closed', () => removeFromOpenedList(app.name))
-//     // addToOpenedList(app.name)
-//     })
-//     .catch(err => {
-//         console.warn('Application already opened')
-//     // addToOpenedList(app.name)
-//     })
-// }
-
-// function detailsSubscribeListner(uuid, topic, data) {
-//     const DETAILS_PAGE_UUID = uuid;
-//     const DETAILS_PAGE_TOPIC = topic;
-//     const DETAILS_DATA = data;
-//     fin.desktop.InterApplicationBus.addSubscribeListener(function (uuid, topic) {
-//         sendToUnNamedMessage(
-//             DETAILS_PAGE_UUID, 
-//             DETAILS_PAGE_TOPIC, 
-//             DETAILS_DATA
-//         );
-//         console.log("The application " + uuid + " has subscribed to " + topic);
-//     });
-// }
 
 function initInterAppBus() {
     if (entryPoint === 'HTML') {
@@ -305,6 +330,22 @@ function subscribeToJavaData() {
         function (message, uuid) {
             // For message format please refer "grid_data" above.
             getGridData(message);
+        }
+    );
+    fin.desktop.InterApplicationBus.subscribe(
+        WILDCARD_UUID,
+        'JAVA_NATIVE_TOPIC_SYMBOL_ADDED',
+        function (message, uuid) {
+            // const newRows = [{
+            //     "symbol":"NEW AAPL",
+            //     "lastPrice":"342.99",
+            //     "change":"7.19",
+            //     "changePercent":"0",
+            //     "marketTime":"22:41:59",
+            //     "marketCap":"1490968",
+            //     "currency":"USD"            
+            // }];
+            gridOptions.api.updateRowData({add: message})
         }
     );
 }

@@ -6,7 +6,6 @@ export const newsTiles = ({newsList})  => {
     return html`
         ${newsList.map((news) => {
             const timestamp = getTime(news.datetime);
-            console.log(timestamp)
             return html`
                 <li class="news">
                     <span class="date">

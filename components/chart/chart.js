@@ -125,10 +125,20 @@ export function showChart(data) {
                 type: 'day',
                 count: 1,
                 text: '1D'
-            }],
+            },
+            {
+                type: '5day',
+                count: 1,
+                text: '5D'
+            },
+            {
+                type: '1month',
+                count: 1,
+                text: '1M'
+            }    
+            ],
             buttonTheme: {
                 fill: 'none',
-                // stroke: '#000000',
                 style: {
                     color: '#4CD2D4',
                     // innerWidth: 100
@@ -136,16 +146,14 @@ export function showChart(data) {
                 states: {
                     hover: {
                         fill: '#707073',
-                        // stroke: '#000000',
                         style: {
-                            color: 'white'
+                            color: '#ffffff'
                         }
                     },
                     select: {
                         fill: '#494D52',
-                        // stroke: '#000000',
                         style: {
-                            color: 'white'
+                            color: '#ffffff'
                         }
                     }
                 }
