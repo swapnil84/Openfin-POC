@@ -198,7 +198,13 @@ const createColumnDefs = (data) => {
                 headerName: headerMapping[e],
                 field: e,
                 valueGetter: (params) => {
-                    return e==='lastPrice' ? '$ '+params.data[e] : params.data[e]
+                    if (e==='marketTime') {
+                        return params.data[e]+' EDT';
+                    }
+                    if (e==='lastPrice') {
+                        return '$ '+params.data[e];
+                    }
+                    return params.data[e];
                 },
                 cellRenderer: e==='symbol' ? (params) => {
                     return getLink(params)

@@ -69,13 +69,28 @@
                                     "type": "column",
                                     "content": [
                                         {
-                                            "type": "component",
-                                            "componentName": "view",
-                                            "componentState": {
-                                                "uuid": "MPH_POC_STOCKLIST_PF_API_VIEWS",
-                                                "name": "Watchlist_Component",
-                                                "url": "http://localhost:5555/components/stock-grid/index.html"
-                                            }
+                                            "type": "stack",
+                                            "content": [
+                                                {
+                                                    "type": "component",
+                                                    "componentName": "view",
+                                                    "componentState": {
+                                                        "uuid": "MPH_POC_STOCKLIST_PF_API_VIEWS",
+                                                        "name": "Watchlist_Component",
+                                                        "url": "http://localhost:5555/components/stock-grid/index.html"
+                                                    }
+                                                },
+                                                {
+                                                    "selected": true,
+                                                    "type": "component",
+                                                    "componentName": "view",
+                                                    "componentState": {
+                                                        "uuid": "MPH_POC_STOCKLIST_PF_API_VIEWS",
+                                                        "name": "Watchlist_Component",
+                                                        "url": "http://localhost:5555/components/stock-grid/index.html"
+                                                    }
+                                                }
+                                            ]
                                         },
                                         {
                                             "type": "row",

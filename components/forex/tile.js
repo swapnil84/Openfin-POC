@@ -1,16 +1,16 @@
 import { html, render } from 'https://unpkg.com/lit-html@1.0.0/lit-html.js';
-import { addCurrency } from './forex.js';
+import { addNewCurrency } from './forex.js';
 
-export const fxTile = ({fxSymbols})  => {
+export const fxTile = (data)  => {
     const currencyPairs = [
         'USD/CAD', 'USD/CNY', 'USD/CHF', 'USD/HKD', 'EUR/GBP', 'USD/KRW'
     ]
-
+    const fxKeys = Object.keys(data.bidask);
     return html`
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                ${fxSymbols.map((item, index) => {
-                    return currencyTab(item, index)
+                ${fxKeys.map((fxKey, index) => {
+                    return currencyTab(fxKey, index)
                 })}
             </div>
             <div class="button-add-fx" id="btn-add-fx" @click=${showCurrencyOptions}>
@@ -18,7 +18,7 @@ export const fxTile = ({fxSymbols})  => {
                     <ul>
                         ${currencyPairs.map(currency => {
                             return html`
-                                <li @click=${() => addCurrency(currency)}>${currency}</li>
+                                <li @click=${() => addNewCurrency(currency)}>${currency}</li>
                             `
                         })}
                     </ul>
@@ -26,15 +26,16 @@ export const fxTile = ({fxSymbols})  => {
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            ${fxSymbols.map((item, index) => {
+            ${fxKeys.map((fxKey, index) => {
                 const activeClass = index === 0 ? 'active' : '';
-                const id = item.join('').toLowerCase();
+                const fxSymbol = fxKey.split(':')[1].split('_');
+                const id = fxSymbol.join('').toLowerCase();
                 return html`
                     <div class="tab-pane fade show ${activeClass}" 
                         id="nav-${id}" 
                         role="tabpanel" 
                         aria-labelledby="nav-${id}-tab">
-                        ${curencyChartContainer(id)}
+                        ${curencyChartContainer(id, fxKey, data)}
                     </div>
                 `
             })}
@@ -42,7 +43,8 @@ export const fxTile = ({fxSymbols})  => {
     `
 }
 
-const curencyChartContainer = (id) => html`
+const curencyChartContainer = (id, fxKey, data) => {
+return html`
             <div class="forex-tile">
                 <div class="currency-wrapper">
                     <span class="currency"></span>
@@ -59,24 +61,24 @@ const curencyChartContainer = (id) => html`
                         <div class="price-wrapper">
                             <div class="sell-buy">
                                 <span class="label">SELL</span>
-                                <span>1.07</span>
+                                <span id="sell_${fxKey}">${data.bidask[fxKey][0][0]}</span>
                             </div>
-                            <div class="price">96</div>
                         </div>
                         <div class="price-wrapper">
                             <div class="sell-buy">
                                 <span class="label">BUY</span>
-                                <span>1.07</span>
+                                <span id="buy_${fxKey}">${data.bidask[fxKey][0][1]}</span>
                             </div>
-                            <div class="price">96</div>
                         </div>
                     </div>
                 </div>
+                <div class="currency-value"><span class="label">EUR</span><span>1,000,000</span></div>
             </div>
             `
-
-const currencyTab = (item, index) => {
-    const id = item.join('').toLowerCase();
+    }
+const currencyTab = (fxKey, index) => {
+    const fxSymbol = fxKey.split(':')[1].split('_');
+    const id = fxSymbol.join('').toLowerCase();
     const activeClass = index === 0 ? 'active' : '';
     return html`
         <a class="nav-item nav-link ${activeClass}" 
@@ -85,7 +87,7 @@ const currencyTab = (item, index) => {
             href="#nav-${id}" 
             role="tab" 
             aria-controls="nav-${id}" 
-            aria-selected="true">${item[0]}/${item[1]}</a>
+            aria-selected="true">${fxSymbol[0]}/${fxSymbol[1]}</a>
     `
 }
 

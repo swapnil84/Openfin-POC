@@ -187,6 +187,10 @@ fieldset label {
     font-size: 14px;
 }
 
+.lm_header .lm_tab {
+    height: 40px !important;
+}
+
 .lm_splitter {
     opacity: 1;
     background-color: #484848;

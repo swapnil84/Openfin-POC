@@ -118,6 +118,27 @@ function createDropdownComponent(message) {
     if (_symbolDropdownWrapper.childNodes.length === 0) {
         _symbolDropdownWrapper.appendChild(createSelect(message));
         _symbolDropdownWrapper.appendChild(createBtnGo());
+    } else {
+        var dd = document.getElementById('stock-dropdown');
+        var children = dd.childNodes;
+        var newArr = message.map(item => item.symbol)
+        var oldArr = [];
+        children.forEach(c => {
+            oldArr.push(c.value)
+        })
+        newArr.push('VOD');
+        var filtered = newArr.filter(
+            function(e) {
+                return this.indexOf(e) < 0;
+            },
+            oldArr
+        );
+        filtered.forEach(item => {
+            var newOption = document.createElement("option");
+            newOption.value = item;
+            newOption.text = item;
+            dd.appendChild(newOption)
+        })
     }
 }
 

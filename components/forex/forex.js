@@ -44,18 +44,23 @@ function init(){
     }
 };
 
-function renderNewFX(fxSymbols) {
-    render(fxTile({fxSymbols}), document.getElementById('main-container'))
+function renderFxContainer(data) {
+    render(fxTile(data), document.getElementById('main-container'))
+}
+
+function renderFxChart(data, fxKeys) {
+    fxKeys.forEach(key => {
+        const seriesName = key.split(':')[1].split('_').join('/');
+        const fxSymbol = key.split(':')[1].split('_').join('').toLowerCase();
+        createFXChart(data, fxSymbol, key, seriesName);
+    })
 }
 
 function createCurrencyChart(data) {
     const fxKeys = Object.keys(data.quote);
     fxSymbols = fxKeys.map(i => i.split(':')).map(j => j[1].split('_'));
-    renderNewFX(fxSymbols)
-    fxKeys.forEach(key => {
-        const fxSymbol = key.split(':')[1].split('_').join('').toLowerCase();
-        createFXChart(data, fxSymbol, key);
-    })
+    renderFxContainer(data);
+    renderFxChart(data, fxKeys);
 }
 
 // async function loadCurrChartData(id, key) {
@@ -94,22 +99,25 @@ fin.desktop.InterApplicationBus.subscribe(
     'MPH_POC_PLTFORM_UUID',
     'TOPIC_FXCHART1',
     function (message, uuid) {
-        console.log(message)
         const fxKeys = Object.keys(message.quote);
         fxKeys.forEach(key => {
+            if (document.getElementById('sell_'+key) && document.getElementById('buy_'+key)) {
+                document.getElementById('sell_'+key).innerHTML = message.bidask[key][0][0]
+                document.getElementById('buy_'+key).innerHTML = message.bidask[key][0][1]
+            }
             const fxSymbol = key.split(':')[1].split('_').join('').toLowerCase();
             markers[fxSymbol+'_chart'].series[0].setData(message.quote[key], true)
         })
     }
 );
 
-function createFXChart(data, symbol, key) {
+function createFXChart(data, symbol, key, seriesName) {
     console.log(data)
     markers[symbol+'_chart'] = new Highcharts.stockChart({
         chart: {
             renderTo: `currency-chart-container-${symbol}`,
             height: 150,
-            backgroundColor: '#25262A',
+            backgroundColor: '#282a2c',
             // events: {
             //     load: loadChartData(symbol, key)
             // }
@@ -120,11 +128,17 @@ function createFXChart(data, symbol, key) {
         yAxis: {
             visible: false
         },
+        tooltip: {
+            valueDecimals: 2,
+            outside: true,
+            headerFormat: '<small>{point.key}</small><table>',
+            pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+                '<td style="text-align: right"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+        },
         series: [{
+            name: seriesName,
             data: data.quote[key],
-            tooltip: {
-                valueDecimals: 2
-            },
             color: '#3f7482'
         }],
         navigator: {
@@ -147,25 +161,21 @@ function createFXChart(data, symbol, key) {
     _loader.style.display = 'none';
 }
 
-export function addCurrency(symbol) {
+export function addNewCurrency(symbol) {
     publishMessage('JAVA_NATIVE_TOPIC_ADD_CURRENCY', symbol);
     addCurrencyChart(symbol)
 }
 
 function generateNewChart(data, symbol) {
     const fxKeys = Object.keys(data.quote);
-    fxSymbols.push(symbol.split('/'));
-    renderNewFX(fxSymbols)
-    fxKeys.forEach(key => {
-        const fxSymbol = key.split(':')[1].split('_').join('').toLowerCase();
-        createFXChart(data, fxSymbol, key);
-    })
+    renderFxContainer(data);
+    renderFxChart(data, fxKeys);
 }
 
 function addCurrencyChart(symbol) {
     // For UI Side Testing
     Highcharts.getJSON(fxDataUrl1, function (data) {
-        generateNewChart(data, symbol);
+        generateNewChart(data);
     });
     // For JAVA Implementation
     fin.desktop.InterApplicationBus.subscribe(

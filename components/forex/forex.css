@@ -43,10 +43,11 @@
     width: 29px;
     text-align: center;
     font-size: 12px;
+    color: #d8d9d9;
 }
 
 .sell-buy .label {
-    color: #97989A;
+    color: #9fa0a2;
 }
 
 .price {
@@ -84,6 +85,17 @@
     border-bottom: 7px solid #23a457;
 }
 
+.currency-value {
+    margin-top: 15px;
+    color: #d8d9d9;
+}
+
+.currency-value .label {
+    color: #9fa0a2;
+    width: 50px;
+    display: inline-block;
+}
+
 .button-add-fx {
     background-image: url('../../assets/add_icon.svg');
     background-size: 20px;
@@ -103,6 +115,7 @@
     border: 1px #ffffff solid;
     background-color: #2F3338;
     color: #fff;
+    z-index: 10;
 }
 
 #currency-selector li {
