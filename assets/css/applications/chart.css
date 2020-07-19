@@ -40,3 +40,11 @@ g.highcharts-button.highcharts-button-normal text {
 g.highcharts-button.highcharts-button-normal rect {
   fill: none !important;
 }
+
+g.highcharts-yaxis .highcharts-axis-line {
+	stroke-width: 1px;
+}
+
+g.highcharts-button.highcharts-button-disabled text {
+    cursor: default !important;
+}

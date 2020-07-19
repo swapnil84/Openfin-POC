@@ -20,6 +20,7 @@ const _symbolDropdownWrapper = document.querySelector("#dropdown-container");
 const _sellShortContainer = document.querySelector("#sell-short-container");
 const _sellShortField = document.querySelector("#enter-sell-short");
 const _sellShortBTN = document.querySelector("#sell-short-btn");
+const _stockSellOptions = document.querySelector("#stock-sell-options");
 
 const staticData = {
     prevClose: "314.96",
@@ -201,4 +202,19 @@ function updateData(res){
         const sellShotValue = _sellShortField.value;
         publishMessage('JAVA_NATIVE_TOPIC_SELL_SHORT', sellShotValue);
     })
+
+    document.getElementById('btn-toggle').addEventListener('click', function(event) {
+        if (_stockSellOptions.style.display === 'none') {
+            _stockSellOptions.style.display = 'block'
+        } else {
+            _stockSellOptions.style.display = 'none'
+        }
+    })
+
+    document.getElementById("stock-sell-options").addEventListener("click",function(e) {
+        if(e.target && e.target.nodeName == "LI") {
+            document.getElementById('sell-short-btn').innerText = e.target.innerText;
+            _stockSellOptions.style.display = 'none'
+        }
+    });
 }());

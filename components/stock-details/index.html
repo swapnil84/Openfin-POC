@@ -15,9 +15,9 @@
  </head>
 <body>
 <div class="loader" id="loader"></div>
-<div id="dropdown-container" class="mt-20"></div>
+<div id="dropdown-container" class="mt-20" style="padding-left: 15px;"></div>
 <div id="main-container" style="display: none;" class="container-fluid mt-10">
-    <div class="row stock-details content-wrapper">
+    <div class="row stock-details content-wrapper pt-0">
         <div class="col-12 p-0">
             <div class="stock-name-wrapper">
                 <h1 class="stock-name" id="stock-name">Stock Name</h1>
@@ -111,6 +111,12 @@
                 <span class="label">Quantity</span>
                 <input type="text" placeholder="Enter Qty" id="enter-sell-short" />
                 <button class="btn-prime" id="sell-short-btn">SELL SHORT</button>
+                <button class="btn-toggle" id="btn-toggle"><i class="arrow down"></i></button>
+                <ul class="option-dropdown" id="stock-sell-options" style="display: none;">
+                    <li value="Buy">Buy</li>
+                    <li value="Sell">Sell</li>
+                    <li value="Sell Short">Sell Short</li>
+                </ul>
             </div>
         </div>
     </div>

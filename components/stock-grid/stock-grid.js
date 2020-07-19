@@ -38,6 +38,9 @@ let gridOptions = {
         sortable: true,
         resizable: true,
     },
+    getRowNodeId: function(data) {
+        return data.id;
+    },
     isExternalFilterPresent: isExternalFilterPresent,
     doesExternalFilterPass: doesExternalFilterPass,
     onGridReady: function (params) {
@@ -86,16 +89,6 @@ _filterSymbolField.addEventListener('blur', function() {
 _addSymbolBTN.addEventListener('click', function() {
     alert(_filterSymbolField.value);
     publishMessage('JAVA_NATIVE_TOPIC_ADD_SYMBOL', _filterSymbolField.value);
-    // const newRows = [{
-    //     "symbol":"NEW AAPL",
-    //     "lastPrice":"342.99",
-    //     "change":"7.19",
-    //     "changePercent":"0",
-    //     "marketTime":"22:41:59",
-    //     "marketCap":"1490968",
-    //     "currency":"USD"            
-    // }];
-    // gridOptions.api.updateRowData({add: newRows}) 
 })
 
 function selectSymbol(symbol) {
@@ -187,14 +180,25 @@ const createColumnDefs = (data) => {
         'lastPrice': 'Last Price',
         'change': 'Change',
         'changePercent': 'Chg %',
-        'currency': 'Currency',
         'marketTime': 'Market Time',
-        'marketCap': 'Market Cap',
+        'marketCap': 'Market Cap (M)',
     }
+    const columnOrder = [
+        'symbol',
+        'changePercent',
+        'marketCap',        
+        'marketTime',
+        'lastPrice',
+        'change'
+    ]
+    const numberCols = [
+        'lastPrice',
+        'change'
+    ]
     const cols = [];
     Object.keys(data[0]).forEach(e => {
         cols.push(
-            {
+            {   
                 headerName: headerMapping[e],
                 field: e,
                 valueGetter: (params) => {
@@ -211,22 +215,35 @@ const createColumnDefs = (data) => {
                 } : undefined,
                 cellClass: e==='symbol' ? 'symbol-column' : undefined,
                 headerClass: e==='symbol' ? 'symbol-header-column' : undefined,
-                headerCheckboxSelection: e==='symbol' ?   true : undefined,
-                headerCheckboxSelectionFilteredOnly: e==='symbol' ? true: undefined,
-                checkboxSelection: e==='symbol' ? true : undefined,
+                cellStyle: numberCols.indexOf(e) >= 0 ? {'text-align': 'right'} : undefined,
                 width: e==='symbol' ? 180 : undefined,
-                hide: e==='currency' ? true : undefined
+                hide: e==='currency' || e === 'id' ? true : undefined
             }
         )
+    });
+    cols.sort(function (a,b){
+        return columnOrder.indexOf(a.field) - columnOrder.indexOf(b.field)
     });
     return cols;
 }
 
+function createRowData(data) {
+    data.forEach(row => {
+        row['id'] = row.symbol;
+    })
+
+    return data
+}
+
 const getGridData = function (data) {
-    gridOptions.api.setRowData(data);
+    gridOptions.api.setRowData(createRowData(data));
     gridOptions.api.setColumnDefs(createColumnDefs(data));
+    // var columnDefs = gridOptions.columnApi.columnController.columnDefs;
+    // columnDefs.push({ field: 'volume', headerName: 'Volume'});
+    // gridOptions.api.setColumnDefs(columnDefs);
+    // getStockVolume(data);
     gridOptions.api.sizeColumnsToFit();
-    gridOptions.api.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true));
+    // gridOptions.api.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true));
     _mainContainer.style.display = 'block';
     _loader.style.display = 'none';
     setTimeout(() => {
@@ -235,13 +252,40 @@ const getGridData = function (data) {
     requestData();
 }
 
+function setStockVolume(symbol, data) {
+    var rowNode = gridOptions.api.getRowNode(symbol);
+    rowNode.setDataValue('volume', data);
+  }
+
+function getStockVolume(gridData) {
+    const socket = new WebSocket('wss://ws.finnhub.io?token=brgslqnrh5r9t6gjebng');
+    // Connection opened -> Subscribe
+    socket.addEventListener('open', function (event) {
+        gridData.forEach(s => {
+            socket.send(JSON.stringify({'type':'subscribe', 'symbol': s.symbol}))
+        })
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        const data = JSON.parse(event.data);
+        if(data.type === 'trade') {
+            gridData.forEach(s => {
+                const symVolume = data.data[0]
+                if (symVolume.s === s.symbol) {
+                    setStockVolume(s.symbol, symVolume.v)
+                }
+            })
+        }
+    });
+
+    // Unsubscribe
+    var unsubscribe = function(symbol) {
+        socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
+    }
+}
+
 async function requestData() {
-    // const result = await fetch('https://demo-live-data.highcharts.com/time-rows.json');
-    // if(result.ok) {
-    //     const data = await result.json();
-    //     publishMessage('TOPIC_FXCHART', data);
-    //     setTimeout(requestData, 10000);
-    // }
     const result = await fetch(fxDataUrl)
     if(result.ok) {
         const data = await result.json();
@@ -279,14 +323,29 @@ function initNoOpenFin(){
 function initInterAppBus() {
     if (entryPoint === 'HTML') {
         const grid_data = [
+            // {
+            //     "symbol":"BINANCE:BTCUSDT",
+            //     "lastPrice":"342.99",
+            //     "change":"7.19",
+            //     "changePercent":"0",
+            //     "marketTime":"22:41:59",
+            //     "marketCap":"1490968",
+            // },
+            // {
+            //     "symbol":"BINANCE:BNBBTC",
+            //     "lastPrice":"342.99",
+            //     "change":"7.19",
+            //     "changePercent":"0",
+            //     "marketTime":"22:41:59",
+            //     "marketCap":"1490968",
+            // },
             {
-                "symbol":"AAPL",
+                "symbol":"APPL",
                 "lastPrice":"342.99",
                 "change":"7.19",
                 "changePercent":"0",
                 "marketTime":"22:41:59",
                 "marketCap":"1490968",
-                "currency":"USD"            
             },
             {
                 "symbol":"JPM",
@@ -295,7 +354,6 @@ function initInterAppBus() {
                 "changePercent":"0",
                 "marketTime":"22:42:00",
                 "marketCap":"336817.9",
-                "currency":"USD"            
             },
             {
                 "symbol":"MPHASIS.NS",
@@ -304,7 +362,6 @@ function initInterAppBus() {
                 "changePercent":"0",
                 "marketTime":"22:42:02",
                 "marketCap":"165380.4",
-                "currency":"USD",
             },
             {
                 "symbol":"WFS",
@@ -313,7 +370,6 @@ function initInterAppBus() {
                 "changePercent":"0",
                 "marketTime":"22:42:02",
                 "marketCap":"165380.4",
-                "currency":"USD"
             }
         ]
         getGridData(grid_data);
@@ -342,15 +398,6 @@ function subscribeToJavaData() {
         WILDCARD_UUID,
         'JAVA_NATIVE_TOPIC_SYMBOL_ADDED',
         function (message, uuid) {
-            // const newRows = [{
-            //     "symbol":"NEW AAPL",
-            //     "lastPrice":"342.99",
-            //     "change":"7.19",
-            //     "changePercent":"0",
-            //     "marketTime":"22:41:59",
-            //     "marketCap":"1490968",
-            //     "currency":"USD"            
-            // }];
             gridOptions.api.updateRowData({add: message})
         }
     );

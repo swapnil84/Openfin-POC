@@ -15,15 +15,35 @@
     <!-- <script src="../../lib/jquery.min.js"></script>
     <script src="../../lib/bootstrap/bootstrap.bundle.min.js"></script> -->
     <script src="../../lib/highcharts/highstock.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script>
     <script src="../../lib/highcharts/data.js"></script>
  </head>
 <body>
   <div class="loader" id="loader"></div>
   <div id="dropdown-container" class="mt-20"></div>
   <div id="main-container" class="container-fluid main-wrapper" style="display: none;">
+    <div id="date-button-container">
+      <div class="button" id="date-range">Date Range</div>
+    </div>
+    <div id="custom-buttons-container">
+      <div class="button" id="chart-button"></div>
+      <select class="chart-type-dropdown">
+        <option>Line</option>
+        <option>Area</option>
+      </select>
+      <div class="button" id="setting-button"></div>
+      <div class="button" id="refresh-button"></div>
+    </div>
+    <!-- <div id="zoom-buttons-container">
+      <div class="button" id="zoom-in-button"></div>
+      <div class="button" id="zoom-out-button"></div>
+    </div> -->
       <div id="container" style="width: 100%;"></div>
   </div>
   <script type="module" src="chart-app.js"></script>
   <script type="module" src="chart.js"></script>
+  <link rel="stylesheet" href="price-chart.css">
 </body>
 </html>

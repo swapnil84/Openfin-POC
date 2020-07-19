@@ -2,8 +2,8 @@
     border-top: 0px;
     border-left: 0px;
     border-right: 0px;
-    background-color: #25262A;
-    border-bottom-color: #424346;
+    background-color:transparent;
+    border-bottom-color: #4e5053;
 }
 
 .list-item-label {
@@ -50,9 +50,36 @@
 .sell-short {
     color: #ffffff;
     margin-left: auto;
+    display: flex;
+    position: relative;
+}
+
+.sell-short .label {
+    line-height: 30px;
 }
 
 .sell-short input {
     margin-left: 10px;
     width: 90px;
+}
+
+.option-dropdown {
+    position: absolute;
+    right: 0;
+    bottom: 34px;
+    background: #fff;
+    color: #212529;
+    width: 110px;
+}
+
+.option-dropdown li {
+    cursor: default;
+    font-size: 14px;
+    padding: 3px 10px;
+}
+
+#sell-short-btn {
+    width: 85px;
+    text-align: left;
+    text-transform: uppercase;
 }

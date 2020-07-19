@@ -20,18 +20,18 @@ html {
 }
 
 body, html {
-    background-color: #2F3338;
+    background-color: #353a40;
 }
 
 .content-wrapper {
-    background-color: #25262A;
+    /* background-color: #25262A; */
     padding: 15px;
     color: #ffffff;
 }
 
 ul{
     list-style-type: none;
-    line-height: 30px;
+    line-height: 25px;
     margin: 0;
     padding: 0;
 }
@@ -129,7 +129,7 @@ button.btn-go {
     cursor: pointer;
 }
 
-button.btn-prime, button.btn-second {
+button.btn-prime, button.btn-second, button.btn-toggle {
     background-color: #4CD2D4;
     padding: 5px 10px;
     border: 0;
@@ -141,6 +141,10 @@ button.btn-prime, button.btn-second {
     font-size: 12px;
     font-weight: 600;
     height: 33px;
+}
+
+button.btn-toggle {
+    margin-left: 2px;
 }
 
 button.btn-second {
@@ -165,3 +169,16 @@ button.btn-second {
     box-shadow: inset 0 0 20px 20px rgba(113,113,113);
     -webkit-box-shadow: inset 0 0 20px 20px rgba(113,113,113);
 }
+
+.arrow {
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    margin-bottom: 2px;
+  }
+
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }

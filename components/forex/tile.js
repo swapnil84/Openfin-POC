@@ -43,19 +43,27 @@ export const fxTile = (data)  => {
     `
 }
 
+function getToday() {
+    var a = new Date();
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    return date+month;
+}
+
 const curencyChartContainer = (id, fxKey, data) => {
+    // <div class="up-down-indicator">
+    //                     <span class="down">0.6</span>
+    //                 </div>
 return html`
             <div class="forex-tile">
                 <div class="currency-wrapper">
                     <span class="currency"></span>
-                    <span class="date">SPT(28May)</span>
+                    <span class="date">SPT(${getToday()})</span>
                 </div>
                 <div class="currency-chart-wrapper">
                     <div class="currency-chart">
                         <div id="currency-chart-container-${id}" style="width: 100%;"></div>
-                    </div>
-                    <div class="up-down-indicator">
-                        <span class="down">0.6</span>
                     </div>
                     <div class="price-container">
                         <div class="price-wrapper">

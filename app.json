@@ -94,9 +94,9 @@
                                         },
                                         {
                                             "type": "row",
-                                            "defaultHeight": 58,
-                                            "minHeight": 58,
-                                            "height": 58,
+                                            "defaultHeight": 55,
+                                            "minHeight": 55,
+                                            "height": 55,
                                             "content": [
                                                 {
                                                     "type": "component",
@@ -141,12 +141,20 @@
                                             }
                                         },
                                         {
-                                            "type": "component",
-                                            "componentName": "view",
-                                            "componentState": {
-                                                "name": "News_Component",
-                                                "url": "http://localhost:5555/components/news/index.html"
-                                            }
+                                            "type": "row",
+                                            "defaultHeight": 55,
+                                            "minHeight": 55,
+                                            "height": 55,
+                                            "content": [
+                                                {
+                                                    "type": "component",
+                                                    "componentName": "view",
+                                                    "componentState": {
+                                                        "name": "News_Component",
+                                                        "url": "http://localhost:5555/components/news/index.html"
+                                                    }
+                                                }
+                                            ]
                                         }
                                     ]
                                 }                                
